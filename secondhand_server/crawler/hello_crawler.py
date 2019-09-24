@@ -99,18 +99,20 @@ def hello_crawler():
         raw_data["market"] = '헬로마켓'
         posted_at_text = soup.select('div.item_addr_area > span')[0].text
         posted_at = ''
-        if(posted_at_text.find('분') != -1 or posted_at_text.find('시간') != -1):
+        if(posted_at_text.find('분') != -1 or posted_at_text.find('시간') != -1 or posted_at_text.find('초') != -1):
             posted_at = datetime.datetime.now().date()
         elif(posted_at_text.find('일') != -1):
             day_int = int(posted_at_text.replace("일전", ""))
             posted_at = (datetime.date.today(
-            ) - datetime.timedelta(days=day_int)).strftime("%Y-%m-%d")
+            ) - datetime.timedelta(days=day_int))
         else:
             reg_exr = re.compile(r'[0-9]*\d\b')
             num = reg_exr.findall(posted_at_text)
             date_string = '2019-'
             if(len(num[0]) == 1):
                 date_string = date_string + '0' + num[0] + '-' + num[1]
+                posted_at = datetime.datetime.strptime(
+                    date_string, '%Y-%m-%d').date()
             else:
                 date_string = date_string + num[0] + '-' + num[1]
                 posted_at = datetime.datetime.strptime(
