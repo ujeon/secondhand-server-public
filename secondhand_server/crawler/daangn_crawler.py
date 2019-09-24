@@ -2,13 +2,31 @@ import requests, json, datetime, os
 
 from bs4 import BeautifulSoup
 from urllib import parse
+from django.core.exceptions import ImproperlyConfigured
+
+# 시크릿 키가 담긴 파일 불러오는 함수
+with open("secrets.json") as f:
+    secret = json.loads(f.read())
+
+
+def get_secret(setting, secret=secret):
+    try:
+        return secret[setting]
+    except:
+        error_msg = "Set key '{0}' in secret.json".format(setting)
+        raise ImproperlyConfigured(error_msg)
+
+
+# 필요한 시크릿 키는 아래와 같이 변수에 담아서 사용
+NAVER_API_ID = get_secret("NAVER_API_ID")
+NAVER_API_KEY = get_secret("NAVER_API_KEY")
 
 
 def getCoordinate(query):
     encodedQuery = parse.quote(query)
     headers = {
-        "X-NCP-APIGW-API-KEY-ID": "NAVER_API_ID",
-        "X-NCP-APIGW-API-KEY": "NAVER_API_KEY",
+        "X-NCP-APIGW-API-KEY-ID": NAVER_API_ID,
+        "X-NCP-APIGW-API-KEY": NAVER_API_KEY,
     }
     req = requests.get(
         f"https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query={encodedQuery}",
@@ -52,7 +70,7 @@ def daangn_crawler():
                 "url": f"https://www.daangn.com{link}",
             }
 
-            location = getCoordinate(soup.select("#region-name")[0].text)
+            location = soup.select("#region-name")[0].text
             raw_data["location"] = location
 
             dateCheck = soup.select("#article-category > time")[0].text
