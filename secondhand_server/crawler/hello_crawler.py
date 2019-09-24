@@ -128,10 +128,6 @@ def hello_crawler():
             location = getCoordinate(location_string)
         raw_data["location"] = location
         json_type_text.append(raw_data)
-    # 분, 시간 => 오늘로 설정 / 일 전 => 빼면 됨 / 날짜가 들어간 경우 ???
-    # title, content, price, url, img_url, market, posted_at, is_sold, category_id, location
-    # raw_data['title'] = soup.select('div.item_info > span')
-    # soup.select('')
     print(json_type_text)
     return json_type_text
     driver.quit()
