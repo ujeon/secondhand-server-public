@@ -5,6 +5,7 @@ import time
 
 
 class Bungae_crawler:
+    # REVIEW 인스턴스 생성할 때 전달받은 키워드를 self에 keyword로 저장합니다.
     def __init__(self, keyword):
         self.lists_url = "https://core-api.bunjang.co.kr/api/1/find.json?q={keyword}&order=date&n={num}&f_category_id=500"
         self.detail_url = "https://core-api.bunjang.co.kr/api/1/product/{product_id}/detail_info.json?stat_uid=&version=2"
@@ -26,7 +27,7 @@ class Bungae_crawler:
             current_milli_time = lambda: int(round(time.time() * 1000))
             milli_sec = current_milli_time() - parsed_details["update_time"]
             date = datetime.datetime.fromtimestamp(milli_sec / 1000.0)
-            date = date.strftime("%Y-%m-%d %H:%M:%S")
+            date = date.strftime("%Y-%m-%d")
 
             # REVIEW 위치와 이미지는 존재하지 않을 가능성이 있으므로, 없는 경우에는 None으로 처리하였습니다.
             temp = {
@@ -51,7 +52,7 @@ class Bungae_crawler:
         return result
 
 
-# REVIEW 찾고자 하는 카테고리 키워드를 전달합니다.
+# REVIEW 번개장터 크롤러 클래스에 찾고자 하는 카테고리 키워드를 전달합니다.
 a = Bungae_crawler("유모차")
 
 # REVIEW 가져올 데이터의 갯수를 전달합니다.
