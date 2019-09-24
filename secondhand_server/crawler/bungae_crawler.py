@@ -1,7 +1,4 @@
-import requests
-import json
-import datetime
-import time
+import requests, datetime, time, json
 
 
 class Bungae_crawler:
@@ -23,7 +20,7 @@ class Bungae_crawler:
             req_detail = requests.get(url2)
             parsed_details = json.loads(req_detail.text)["item_info"]
 
-            # REVIEW 현재 시간 - update_time을 계산하였는데, 딱히 정확한 것 같지는 않습니다.
+            # TOFIX 현재 시간 - update_time을 계산하였는데, 딱히 정확한 것 같지는 않습니다.
             current_milli_time = lambda: int(round(time.time() * 1000))
             milli_sec = current_milli_time() - parsed_details["update_time"]
             date = datetime.datetime.fromtimestamp(milli_sec / 1000.0)
