@@ -11,6 +11,7 @@ requests = "*"
 bs4 = "*"
 selenium = "*"
 django-cors-headers = "*"
+mysqlclient = "*"
 
 [requires]
 python_version = "3.7"
