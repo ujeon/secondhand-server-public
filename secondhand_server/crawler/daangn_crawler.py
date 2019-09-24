@@ -1,7 +1,25 @@
-import requests
+import requests, json, datetime, os
 
 from bs4 import BeautifulSoup
-import datetime
+from urllib import parse
+
+
+def getCoordinate(query):
+    encodedQuery = parse.quote(query)
+    headers = {
+        "X-NCP-APIGW-API-KEY-ID": "NAVER_API_ID",
+        "X-NCP-APIGW-API-KEY": "NAVER_API_KEY",
+    }
+    req = requests.get(
+        f"https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query={encodedQuery}",
+        headers=headers,
+    )
+    locationBody = json.loads(req.text)
+    location = {
+        "longitude": locationBody["addresses"][0]["x"],
+        "latitude": locationBody["addresses"][0]["y"],
+    }
+    return location
 
 
 def daangn_crawler():
@@ -9,7 +27,7 @@ def daangn_crawler():
     category = ["유모차"]
     eachItemAddress = {}
     for i in category:
-        for k in range(500, 502):
+        for k in range(654, 655):
             req = requests.get(
                 f"https://www.daangn.com/search/{i}/more/flea_market?page={k}"
             )
@@ -32,8 +50,10 @@ def daangn_crawler():
                 .text.replace("\n", " ")
                 .strip(),
                 "url": f"https://www.daangn.com{link}",
-                "location": soup.select("#region-name")[0].text,
             }
+
+            location = getCoordinate(soup.select("#region-name")[0].text)
+            raw_data["location"] = location
 
             dateCheck = soup.select("#article-category > time")[0].text
             if ("일" in dateCheck) == False:
@@ -48,14 +68,17 @@ def daangn_crawler():
 
             if (
                 len(soup.select("#article-price")) == 0
-                or soup.select("#article-price")[0].text.replace("\n", " ").strip()[-1]
+                or soup.select("#article-price")[0].text.replace("\n", "").strip()[-1]
                 != "원"
             ):
                 raw_data["price"] = 0
             else:
-                raw_data["price"] = (
-                    soup.select("#article-price")[0].text.replace("\n", " ").strip()
-                )
+                price = soup.select("#article-price")[0].text
+                toBeReplaces = ["\n", "원", ","]
+                for el in toBeReplaces:
+                    if el in price:
+                        price = price.replace(el, "")
+                raw_data["price"] = int(price.strip())
 
             if len(soup.select("div.image-wrap > img")) > 0:
                 raw_data["img_url"] = soup.select("div.image-wrap > img")[0].attrs[
@@ -63,7 +86,7 @@ def daangn_crawler():
                 ]
             else:
                 raw_data["img_url"] = None
-            print(raw_data)
+            print("Raw_data", raw_data)
 
 
 daangn_crawler()
