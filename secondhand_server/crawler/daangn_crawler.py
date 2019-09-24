@@ -33,10 +33,9 @@ def getCoordinate(query):
         headers=headers,
     )
     locationBody = json.loads(req.text)
-    location = {
-        "longitude": locationBody["addresses"][0]["x"],
-        "latitude": locationBody["addresses"][0]["y"],
-    }
+    location = (
+        f'{locationBody["addresses"][0]["y"]}-{locationBody["addresses"][0]["x"]}'
+    )
     return location
 
 
@@ -68,9 +67,10 @@ def daangn_crawler():
                 .text.replace("\n", " ")
                 .strip(),
                 "url": f"https://www.daangn.com{link}",
+                "market": "당근마켓",
             }
 
-            location = soup.select("#region-name")[0].text
+            location = getCoordinate(soup.select("#region-name")[0].text)
             raw_data["location"] = location
 
             dateCheck = soup.select("#article-category > time")[0].text
