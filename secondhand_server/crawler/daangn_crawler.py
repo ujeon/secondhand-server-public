@@ -1,3 +1,6 @@
+# FIXED 데이터 베이스에 (아마도?) 전부 Null 허용이 안되어서 뭐라도 값이 들어가야 할 것 같아요. 전부 "-"로 수정했습니다.
+# FIXED 기본적으로 가져오는 데이터(페이지) default 설정해놨습니다.
+
 import requests
 import json
 import datetime
@@ -8,7 +11,12 @@ from urllib import parse
 from django.core.exceptions import ImproperlyConfigured
 
 # 시크릿 키가 담긴 파일 불러오는 함수
-with open("secrets.json") as f:
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+secret_file = os.path.join(BASE_DIR, "secret.json")
+
+
+with open(secret_file) as f:
     secret = json.loads(f.read())
 
 
@@ -42,7 +50,7 @@ def getCoordinate(query):
     return location
 
 
-def daangn_crawler(page):
+def daangn_crawler(page=10):
     # 추후 데이터베이스에서 가져온 카테고리 리스트 사용
     category = ["유모차"]
     eachItemAddress = {}
@@ -73,6 +81,7 @@ def daangn_crawler(page):
                 "url": f"https://www.daangn.com{link}",
                 "market": "당근마켓",
                 "is_sold": False,
+                "category_id": 1,
             }
 
             location = getCoordinate(soup.select("#region-name")[0].text)
@@ -108,10 +117,8 @@ def daangn_crawler(page):
                     "data-lazy"
                 ]
             else:
-                raw_data["img_url"] = None
+                raw_data["img_url"] = "-"
             result.append(raw_data)
     print(result)
     return result
 
-
-daangn_crawler(2)
