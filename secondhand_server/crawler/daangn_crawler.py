@@ -1,4 +1,7 @@
-import requests, json, datetime, os
+import requests
+import json
+import datetime
+import os
 
 from bs4 import BeautifulSoup
 from urllib import parse
@@ -39,12 +42,12 @@ def getCoordinate(query):
     return location
 
 
-def daangn_crawler():
+def daangn_crawler(page):
     # 추후 데이터베이스에서 가져온 카테고리 리스트 사용
     category = ["유모차"]
     eachItemAddress = {}
     for i in category:
-        for k in range(654, 655):
+        for k in range(1, page):
             req = requests.get(
                 f"https://www.daangn.com/search/{i}/more/flea_market?page={k}"
             )
@@ -55,6 +58,7 @@ def daangn_crawler():
                 addressList.append(link.attrs["href"])
                 eachItemAddress[str(k)] = addressList
 
+    result = []
     for page in eachItemAddress:
         for link in eachItemAddress[page]:
             req = requests.get(f"https://www.daangn.com{link}")
@@ -68,6 +72,7 @@ def daangn_crawler():
                 .strip(),
                 "url": f"https://www.daangn.com{link}",
                 "market": "당근마켓",
+                "is_sold": False,
             }
 
             location = getCoordinate(soup.select("#region-name")[0].text)
@@ -104,7 +109,9 @@ def daangn_crawler():
                 ]
             else:
                 raw_data["img_url"] = None
-            print("Raw_data", raw_data)
+            result.append(raw_data)
+    print(result)
+    return result
 
 
-daangn_crawler()
+daangn_crawler(2)
