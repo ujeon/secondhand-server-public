@@ -12,7 +12,7 @@ class Raw_data(models.Model):
     market = models.CharField(max_length=10)
     posted_at = models.DateField()
     is_sold = models.BooleanField()
-    category_id = models.ForeignKey("Category", on_delete=models.PROTECT)
+    category = models.ForeignKey("Category", on_delete=models.PROTECT)
     location = models.CharField(max_length=60)
 
     def __str__(self):
@@ -37,7 +37,7 @@ class Filtered_data(models.Model):
     market = models.CharField(max_length=10)
     posted_at = models.DateField()
     is_sold = models.BooleanField()
-    category_id = models.ForeignKey(Category, on_delete=models.PROTECT)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT)
     location = models.CharField(max_length=60)
 
     def __str__(self):
