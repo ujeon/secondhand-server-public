@@ -12,7 +12,7 @@ class Bungae_crawler:
         self.keyword = keyword
 
     # REVIEW 데이터를 요청하여 가공한 후 가공한 데이터를 반환하는 함수
-    def data_maker(self, count):
+    def data_maker(self, count=50):
         options = webdriver.ChromeOptions()
         options.add_argument("headless")
         options.add_argument("disable-gpu")
@@ -47,7 +47,6 @@ class Bungae_crawler:
             # REVIEW 현재시간을 millisecond로 계산할 수 있도록 하는 함수.
             current_milli_time = lambda: int(round(time.time() * 1000))
 
-            # REVIEW 가져온 시간을 '분', '시간', '일', '주', '달'로 나누어 게시글(업데이트) 날짜를 계산
             if "시간" in update_time:
                 update_time = update_time.split("시간")[0]
                 update_time = int(update_time) * 3600000
@@ -73,33 +72,25 @@ class Bungae_crawler:
 
             date = date.strftime("%Y-%m-%d")
 
-            # REVIEW 위치와 이미지는 존재하지 않을 가능성이 있으므로, 없는 경우에는 None으로 처리하였습니다.
             temp = {
                 "title": parsed_details["name"],
                 "content": parsed_details["description"],
                 "url": link_url,
                 "img_url": parsed_details["product_image"]
                 if parsed_details["product_image"] != ""
-                else None,
+                else "-",
                 "price": parsed_details["price"],
                 "location": parsed_details["latitude"]
                 + "-"
                 + parsed_details["longitude"]
                 if parsed_details["latitude"] != ""
-                else None,
+                else "-",
                 "market": "번개장터",
                 "posted_at": date,
                 "is_sold": True if parsed_details["status"] == 3 else False,
-                "category_id": None,
+                "category_id": 1,
             }
             result.append(temp)
         driver.quit()
         return result
 
-
-# REVIEW 번개장터 크롤러 클래스에 찾고자 하는 카테고리 키워드를 전달합니다.
-a = Bungae_crawler("유모차")
-
-# REVIEW 가져올 데이터의 갯수를 전달합니다.
-data = a.data_maker(10)
-print(data)
