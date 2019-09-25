@@ -13,4 +13,4 @@ db.sqlite3
 
 .DS_Store
 
-/secondhand_server/secret.json
+/secondhand_server/crawler/secrets.json
