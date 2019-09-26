@@ -6,6 +6,7 @@ from . import views
 
 urlpatterns = [
     path("eachModelInfo/<str:brand>/<str:model>/info/", views.handle_each_model_info),
+    path("search/", views.handle_search_price),
     path("all/", views.search_route_brand_model),
     path("allCategories/", views.get_categories),
     path("category/<str:category>/brand/", views.get_brands),

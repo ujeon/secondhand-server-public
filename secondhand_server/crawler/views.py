@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 
 from .models import Raw_data
 from .bungae_crawler import Bungae_crawler
@@ -11,6 +10,7 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from django.core import serializers
 import json
+
 
 # Create your views here.
 
@@ -32,6 +32,40 @@ def handle_each_model_info(request, brand, model):
     response = JsonResponse(result)
 
     return HttpResponse(response)
+
+
+
+def handle_search_price(request):
+    request_body = json.loads(request.body)
+
+    if request_body["brand"] and request_body["model"]:
+        price_filtered_data = Filtered_data.objects.filter(
+            price__range=[request_body["min_price"], request_body["max_price"]],
+            brand=request_body["brand"],
+            model=request_body["model"],
+        )
+
+    else:
+        price_filtered_data = Filtered_data.objects.filter(
+            price__range=[request_body["min_price"], request_body["max_price"]]
+        )
+
+    average_price = Average_price.objects.all()
+
+    temp = []
+    for data in price_filtered_data.values():
+        for average_data in average_price.values():
+            if (
+                data["brand"] == average_data["brand"]
+                and data["model"] == average_data["model"]
+            ):
+                data["average_price"] = average_data["average_price"]
+                temp.append(data)
+
+    response = JsonResponse(temp, safe=False)
+
+    return HttpResponse(response)
+
 
 
 def input_bungae_data(request):
@@ -68,6 +102,7 @@ def input_bungae_data(request):
         # TOFIX: 어떤 에러인지 확인이 어렵습니다..!
     except:
         return HttpResponse(status=500)
+
 
 
 # GET 요청
@@ -131,3 +166,4 @@ def get_models(request, category, brand):
     response = JsonResponse(result, safe=False)
 
     return HttpResponse(response)
+
