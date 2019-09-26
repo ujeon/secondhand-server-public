@@ -56,3 +56,20 @@ class Average_price(models.Model):
 
     def __str__(self):
         return self.brand
+
+
+class User(models.Model):
+    id = models.AutoField(primary_key=True)
+    email = models.EmailField(max_length=255, unique=True)
+    nickname = models.CharField(max_length=10)
+    password = models.CharField(max_length=255)
+    salt = models.CharField(max_length=255)
+    thid_party_token = models.CharField(max_length=255)
+    signup_date = models.DateField(auto_now_add=True)
+
+
+class Favorite(models.Model):
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    filtered_data_id = models.IntegerField()
+
