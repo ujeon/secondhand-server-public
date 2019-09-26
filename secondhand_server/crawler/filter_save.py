@@ -28,9 +28,12 @@ def input_fitered_data(all_data):
 
 # DB에서 raw data를 불러오는 함수
 def retrieve_raw_data(request):
-    data_set = Raw_data.objects.all()
+    data_set = Raw_data.objects.filter(
+        price__gt = 0
+    )
     for data in data_set:
-        filtered_data = filter_func(data)
-        input_fitered_data(filtered_data)
+        if data["price"] % 1000 == 0:
+            filtered_data = filter_func(data)
+            input_fitered_data(filtered_data)
 
 # 다른 파일에서 filter_func를 만들어서 불러 올 예정
