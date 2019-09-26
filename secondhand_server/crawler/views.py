@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.http import HttpRequest
 
 from .models import Raw_data
 from .bungae_crawler import Bungae_crawler
