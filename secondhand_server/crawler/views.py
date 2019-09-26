@@ -6,13 +6,14 @@ from .bungae_crawler import Bungae_crawler
 from .daangn_crawler import daangn_crawler
 from .hello_crawler import hello_crawler
 
-from .models import Filtered_data, Average_price
+from .models import Filtered_data, Average_price, Category
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.core import serializers
 import json
 
 # Create your views here.
+
 
 def handle_each_model_info(request, brand, model):
     average_price = Average_price.objects.filter(brand=brand, model=model)
@@ -31,6 +32,7 @@ def handle_each_model_info(request, brand, model):
     response = JsonResponse(result)
 
     return HttpResponse(response)
+
 
 def input_bungae_data(request):
     # REVIEW: 데이터를 크롤링 하고 DB에 저장합니다. 실패하면 except로 넘어갑니다.
@@ -68,3 +70,64 @@ def input_bungae_data(request):
         return HttpResponse(status=500)
 
 
+# GET 요청
+def search_route_brand_model(request):
+    filtered_data = (
+        Filtered_data.objects.all()
+        .values("brand", "model")
+        .order_by("brand", "model")
+        .distinct()
+    )
+    result = []
+    for data in filtered_data:
+        result.append(data)
+
+    response = JsonResponse(result, safe=False)
+
+    return HttpResponse(response)
+
+
+def get_categories(request):
+    category_data = Category.objects.all().values()
+
+    result = []
+    for data in category_data:
+        result.append(data)
+
+    response = JsonResponse(result, safe=False)
+
+    return HttpResponse(response)
+
+
+def get_brands(request, category):
+    category_id = Category.objects.filter(category_name=category).values("id")[0]
+    filtered_data = (
+        Filtered_data.objects.filter(category=category_id["id"])
+        .values("brand")
+        .order_by("brand")
+        .distinct()
+    )
+    result = []
+    for data in filtered_data:
+        result.append(data)
+
+    response = JsonResponse(result, safe=False)
+
+    return HttpResponse(response)
+
+
+def get_models(request, category, brand):
+    category_id = Category.objects.filter(category_name=category).values("id")[0]
+    filtered_data = (
+        Filtered_data.objects.filter(category=category_id["id"], brand=brand)
+        .values("model")
+        .order_by("model")
+        .distinct()
+    )
+    result = []
+    for data in filtered_data:
+        result.append(data)
+
+    response = JsonResponse(result, safe=False)
+
+    return HttpResponse(response)
