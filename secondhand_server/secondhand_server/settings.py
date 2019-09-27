@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "corsheaders",
     "crawler.apps.CrawlerConfig",
+    "user.apps.UserConfig",
 ]
 
 MIDDLEWARE = [
