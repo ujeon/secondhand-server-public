@@ -15,6 +15,7 @@ selenium = "*"
 django-cors-headers = "*"
 mysqlclient = "*"
 konlpy = "*"
+pycryptodome = "*"
 
 [requires]
 python_version = "3.7"
