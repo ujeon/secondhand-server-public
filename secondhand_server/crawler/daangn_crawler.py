@@ -55,7 +55,7 @@ def daangn_crawler(page=10):
     category = ["유모차"]
     eachItemAddress = {}
     for i in category:
-        for k in range(1, page):
+        for k in range(1, page + 1):
             req = requests.get(
                 f"https://www.daangn.com/search/{i}/more/flea_market?page={k}"
             )
@@ -121,4 +121,3 @@ def daangn_crawler(page=10):
             result.append(raw_data)
     print(result)
     return result
-
