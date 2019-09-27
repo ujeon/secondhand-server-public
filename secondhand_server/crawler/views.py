@@ -34,13 +34,13 @@ def handle_each_model_info(request, brand, model):
     return HttpResponse(response)
 
 
-
 def handle_search_price(request):
     request_body = json.loads(request.body)
 
     if request_body["brand"] and request_body["model"]:
         price_filtered_data = Filtered_data.objects.filter(
-            price__range=[request_body["min_price"], request_body["max_price"]],
+            price__range=[request_body["min_price"],
+                          request_body["max_price"]],
             brand=request_body["brand"],
             model=request_body["model"],
         )
@@ -67,23 +67,22 @@ def handle_search_price(request):
     return HttpResponse(response)
 
 
-
 def input_bungae_data(request):
     # REVIEW: 데이터를 크롤링 하고 DB에 저장합니다. 실패하면 except로 넘어갑니다.
     try:
         # REVIEW: 번개장터 데이터 크롤링
-        bungae_crawler = Bungae_crawler("유모차")
-        bungae_data = bungae_crawler.data_maker()
+        # bungae_crawler = Bungae_crawler("유모차")
+        # bungae_data = bungae_crawler.data_maker(300)
 
         # REVIEW: 헬로마켓 데이터 크롤링
-        hello_data = hello_crawler()
+        hello_data = hello_crawler(10)
 
         # REVIEW: 당근마켓 데이터 크롤링
-        daangn_data = daangn_crawler()
+        # daangn_data = daangn_crawler(100)
 
         # REVIEW: 모든 데이터를 리스트에 저장합니다.
-        all_data = [*bungae_data, *hello_data, *daangn_data]
-
+        all_data = [*hello_data]
+# *bungae_data, *daangn_data
         for data in all_data:
             new_data = Raw_data(
                 title=data["title"],
@@ -100,9 +99,10 @@ def input_bungae_data(request):
             new_data.save()
         return HttpResponse(status=200)
         # TOFIX: 어떤 에러인지 확인이 어렵습니다..!
-    except:
+    except Exception as err:
+        print(err)
+        pass
         return HttpResponse(status=500)
-
 
 
 # GET 요청
@@ -135,7 +135,8 @@ def get_categories(request):
 
 
 def get_brands(request, category):
-    category_id = Category.objects.filter(category_name=category).values("id")[0]
+    category_id = Category.objects.filter(
+        category_name=category).values("id")[0]
     filtered_data = (
         Filtered_data.objects.filter(category=category_id["id"])
         .values("brand")
@@ -152,7 +153,8 @@ def get_brands(request, category):
 
 
 def get_models(request, category, brand):
-    category_id = Category.objects.filter(category_name=category).values("id")[0]
+    category_id = Category.objects.filter(
+        category_name=category).values("id")[0]
     filtered_data = (
         Filtered_data.objects.filter(category=category_id["id"], brand=brand)
         .values("model")
@@ -166,4 +168,3 @@ def get_models(request, category, brand):
     response = JsonResponse(result, safe=False)
 
     return HttpResponse(response)
-

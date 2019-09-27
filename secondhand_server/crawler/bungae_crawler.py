@@ -1,4 +1,7 @@
-import requests, datetime, time, json
+import requests
+import datetime
+import time
+import json
 from selenium import webdriver
 from bs4 import BeautifulSoup
 
@@ -18,7 +21,7 @@ class Bungae_crawler:
         options.add_argument("disable-gpu")
 
         driver = webdriver.Chrome(
-            "/Users/Ujeon/Downloads/chromedriver", chrome_options=options
+            "/Users/khwi/Downloads/chromedriver", chrome_options=options
         )
 
         result = []
@@ -45,7 +48,7 @@ class Bungae_crawler:
             update_time = update_time.split()[0]
 
             # REVIEW 현재시간을 millisecond로 계산할 수 있도록 하는 함수.
-            current_milli_time = lambda: int(round(time.time() * 1000))
+            def current_milli_time(): return int(round(time.time() * 1000))
 
             if "시간" in update_time:
                 update_time = update_time.split("시간")[0]
@@ -68,7 +71,8 @@ class Bungae_crawler:
                 time_gap = current_milli_time() - update_time
                 date = datetime.datetime.fromtimestamp(time_gap / 1000.0)
             else:
-                date = datetime.datetime.fromtimestamp(current_milli_time() / 1000.0)
+                date = datetime.datetime.fromtimestamp(
+                    current_milli_time() / 1000.0)
 
             date = date.strftime("%Y-%m-%d")
 
@@ -93,4 +97,3 @@ class Bungae_crawler:
             result.append(temp)
         driver.quit()
         return result
-

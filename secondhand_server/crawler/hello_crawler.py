@@ -50,10 +50,7 @@ def getCoordinate(query):
     return location
 
 
-def hello_crawler():
-
-    TEST_URL = "https://www.hellomarket.com/search?q=%EC%9C%A0%EB%AA%A8%EC%B0%A8&page=1"
-
+def hello_crawler(number):
     options = webdriver.ChromeOptions()
     options.add_argument("headless")
     options.add_argument("window-size=1920x1080")
@@ -66,33 +63,35 @@ def hello_crawler():
     )
 
     driver = webdriver.Chrome(
-        "/Users/Ujeon/Downloads/chromedriver", chrome_options=options
+        "/Users/khwi/Downloads/chromedriver", chrome_options=options
     )
-
-    driver.get(TEST_URL)
-
-    # headless 탐지 방어 위한 코드
-    driver.execute_script(
-        "Object.defineProperty(navigator, 'plugins', {get: function() {return[1, 2, 3, 4, 5]}})"
-    )
-    driver.execute_script(
-        "Object.defineProperty(navigator, 'languages', {get: function() {return ['ko-KR', 'ko']}})"
-    )
-    driver.execute_script(
-        "const getParameter = WebGLRenderingContext.getParameter;WebGLRenderingContext.prototype.getParameter = function(parameter) {if (parameter === 37445) {return 'NVIDIA Corporation'} if (parameter === 37446) {return 'NVIDIA GeForce GTX 980 Ti OpenGL Engine';}return getParameter(parameter);};"
-    )
-
-    html = driver.page_source
-    soup = BeautifulSoup(html, "html.parser")
-    image_url = soup.select("div.list_area > div > ul > li > a")
 
     item_number_list = []
     json_type_text = []
 
-    for url in image_url:
-        item_href = url.get("href")
-        item_number = item_href[6:]
-        item_number_list.append(item_number)
+    for num in range(5, number + 1):
+        TEST_URL = f"https://www.hellomarket.com/search?q=%EC%9C%A0%EB%AA%A8%EC%B0%A8&page={num}"
+        driver.get(TEST_URL)
+
+        # headless 탐지 방어 위한 코드
+        driver.execute_script(
+            "Object.defineProperty(navigator, 'plugins', {get: function() {return[1, 2, 3, 4, 5]}})"
+        )
+        driver.execute_script(
+            "Object.defineProperty(navigator, 'languages', {get: function() {return ['ko-KR', 'ko']}})"
+        )
+        driver.execute_script(
+            "const getParameter = WebGLRenderingContext.getParameter;WebGLRenderingContext.prototype.getParameter = function(parameter) {if (parameter === 37445) {return 'NVIDIA Corporation'} if (parameter === 37446) {return 'NVIDIA GeForce GTX 980 Ti OpenGL Engine';}return getParameter(parameter);};"
+        )
+
+        html = driver.page_source
+        soup = BeautifulSoup(html, "html.parser")
+        image_url = soup.select("div.list_area > div > ul > li > a")
+
+        for url in image_url:
+            item_href = url.get("href")
+            item_number = item_href[6:]
+            item_number_list.append(item_number)
 
     for item_number in item_number_list:
         raw_data = {}
@@ -102,12 +101,18 @@ def hello_crawler():
 
         raw_data["title"] = soup.select("div.item_info > span")[0].text
         raw_data["content"] = (
-            soup.select("div.description_text")[0].text.replace("\n", " ").strip()
+            soup.select("div.description_text")[
+                0].text.replace("\n", " ").strip()
         )
-        price_string = soup.select("div.item_price.item_price_bottom")[0].text[:-1]
-        raw_data["price"] = int(price_string.replace(",", ""))
+        price_string = soup.select("div.item_price.item_price_bottom")[
+            0].text[:-1]
+        if price_string.replace(",", "").isdigit():
+            raw_data["price"] = int(price_string.replace(",", ""))
+        else:
+            raw_data["price"] = 0
         raw_data["url"] = "https://www.hellomarket.com/item/%s" % item_number
-        raw_data["img_url"] = soup.select("img.view.thumbnail_img")[0].attrs["src"]
+        raw_data["img_url"] = soup.select(
+            "img.view.thumbnail_img")[0].attrs["src"]
         raw_data["market"] = "헬로마켓"
         posted_at_text = soup.select("div.item_addr_area > span")[0].text
         posted_at = ""
@@ -126,10 +131,12 @@ def hello_crawler():
             date_string = "2019-"
             if len(num[0]) == 1:
                 date_string = date_string + "0" + num[0] + "-" + num[1]
-                posted_at = datetime.datetime.strptime(date_string, "%Y-%m-%d").date()
+                posted_at = datetime.datetime.strptime(
+                    date_string, "%Y-%m-%d").date()
             else:
                 date_string = date_string + num[0] + "-" + num[1]
-                posted_at = datetime.datetime.strptime(date_string, "%Y-%m-%d").date()
+                posted_at = datetime.datetime.strptime(
+                    date_string, "%Y-%m-%d").date()
         raw_data["posted_at"] = posted_at
         raw_data["is_sold"] = False
         raw_data["category_id"] = 1
@@ -144,4 +151,3 @@ def hello_crawler():
         json_type_text.append(raw_data)
     driver.quit()
     return json_type_text
-
