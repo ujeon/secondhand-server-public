@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from .models import Raw_data, Filtered_data
+from .filter_func import filter_func
 # filter function에서 처리된 dict 저장 함수
 
 

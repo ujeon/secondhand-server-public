@@ -11,7 +11,7 @@ stroller_dictionary = {
     ('Y-UP', 'YUP', '와이업'): (('GENIE', '지니', '올뉴지니'), ('ROYAL', '로얄')),
     ('COMBI', '콤비'): (('NEMURIE', '네무리에'), ('URBAN WALKER', 'URBAN', 'WALKER', '어번워커', '어번워커라이트', '어번', '워커'), ('WELL COMFORT', 'WELLCOMFORT', '웰컴포트', '웰컴포트플러스', 'COMFORT', 'WELL'), ('F2', 'F2PLUS', 'F2AIR', 'F2AIRLIGHT', '에프2', '에프2플러스', '에프2에어')),
     ('MIMA', '미마'): (('XARI', '자리', '미마자리'), ('ZIGI', '지기', '미마지기')),
-    ('EASYWALKER', '이지워커'): (('HARVEY', '하비'), ('CHARLEY', '찰리'), ('MINI BUGGY', '미니버기', '버기', 'BUGGY')),
+    ('EASYWALKER', '이지워커'): (('HARVEY', '하비'), ('CHARLEY', '찰리'), ('MINI BUGGY', '미니버기', '미니버기XL', '미니버기XS', '버기', 'BUGGY')),
     ('JOOVY', '쥬비', '주비'): (('COOPER', '쿠퍼'), ('BALOON', '벌룬')),
     ('ORBIT', '오르빗'): (('G5',), ('G3',)),
     ('CAPELLA', 'CAPELA', '카펠라', '카팰라'): (('CONY', '코니', '코니플러스', 'CONYPLUS'), ('FREEMOVE', '프리무브'), ('AIR-MOVE', 'AIRMOVE', '에어무브'), ('WI-LITE', '위라이트'), ('SKY', '스카이')),
@@ -32,7 +32,7 @@ stroller_dictionary = {
         ("SESTOPLUS", "세스토플러스", "새스토플러스", "세스토PLUS", "새스토PLUS", "SESTO플러스", "뉴세스토플러스", "뉴새스토플러스",
          "NEW세스토플러스", "NEW새스토플러스", "NEWSESTO플러스", "NEW세스토PLUS", "NEW새스토PLUS", "NEWSESTOPLUS")
     ),
-    ('RECARO', '레카로', '래카로', 'REKARO', 'RECALO', 'REKALO'): (("EASYLIFE", "이지라이프", 'EESYLIFE')),
+    ('RECARO', '레카로', '래카로', 'REKARO', 'RECALO', 'REKALO'): (("EASYLIFE", "이지라이프", 'EESYLIFE'),),
     ('MAMASPAPAS', '마마스앤파파스', '마마스엔파파스'):
     (("URBO2BRITANNIA", "어보2브리타니아", "브리타니아", "URBO2BRITANIA"),
      ("URBO2", "어보2"), ("ARMADILLO", "ARMADILO", "아마딜로", "AMADILO")),
@@ -44,7 +44,7 @@ stroller_dictionary = {
     (('WINGKA', '윙카', '웡카',  'WINGCA', '윈카', '읭카', 'WINKA', 'WINCA'), ('LEMURIPLUS', 'REMURI', '리머I플러스', 'RIMERIPLUS'),
      ('ROY', 'ROI', '로이'), ('RUKAHENGE', 'RUKAHANGE', 'RUKAHENJI', 'RUCAHENGE', 'RUCAHANGE', 'RUCAHENJI', 'LUKAHENGE', 'LUKAHANGE', 'LUKAHENJI', 'LUCAHENGE', 'LUCAHANGE', 'LUCAHENJI', '루카헨지', '루카핸지'), ('T-CARRY', 'TCARRY', 'T-CERRY', 'TCERRY', '티캐리', 'T-캐리', 'T캐리', '티케리', 'T케리', 'T-케리'), ('SOBOTWIN', 'SOVOTWIN', '소보트윈', 'SOBO트윈', 'SOVO트윈'), ('V60', '브이60'), ('G1', '지1', 'GONE', '지ONE'), ('S2', '에스투', '에스2'), ('F9', 'F나인', '에프9'), ('B5', '비5', '비파이브'), ('DLXDELUX', 'DLX디럭스', '디엘엑스디럭스', '디앨액스디럭스', '디엘액스디럭스')),
     ('PEGPEREGO', 'PPEGPPEREGO', 'PAEGPAEREGO', '뻬그뻬레고', '빼그빼레고', '빼그빼래고', '뻬그뻬래고'):
-    (("BOOK51", "북51"), ("BOOKS", "북S"), ('PLIKOMINI', 'PLICOMINI', "FLICOMINI", "플리코미니", "폴리코미니"),
+    (("BOOK51", "북51"), ("BOOKS", "북S"), ('SKATE', '스케이트', '스캐이트'), ('VELA', '벨라', '밸라', 'BELA'), ('PLIKOMINI', 'PLICOMINI', "FLICOMINI", "플리코미니", "폴리코미니"),
      ('PLIKOMINIGHIRO', 'PLICOMINIGHIRO', "FLICOMINIGHIRO", "플리코미니지로", "폴리코미니지로"), ("BOOKFORTWO", "북포투"), ("ARIASHOPPERTWIN", "아리아쇼퍼트윈"), ("DUET", "듀엣")),
     ('AVALON', 'ABALON', '아발론'):
     (("SUPERSLIM", "수퍼슬림", "슈퍼슬림"), ("CARRYON", "CARRYONLIGHT", "캐리언라이트", "케리언라이트", "캐리온라이트", "케리온라이트", "캐리언", "케리언", "캐리온", "케리온", "라이트"),
@@ -53,9 +53,10 @@ stroller_dictionary = {
     (("CABOOSE", "카부스", "ULTRALIGHT", "카부스울트라라이트", "카부스울트라라이트그라파이트", "울트라라이트", "그라파이트"),
      ("BALLOON", "벌룬", "발룬")),
     ('BABYZEN', '베이비젠', '배이비잰'):
-    (("YOYO", "요요"), ("YOYO+", "YOYOPLUS", "요요플러스", "요요플라스", "6플러스"))
+    (("YOYO", "요요"), ("YOYO+", "YOYOPLUS", "요요플러스", "요요플라스", "6플러스")),
+    ('PALI', '팔리'): (('AIGO', '아이고'),)
 }
 
 pet_dictionary = {
-    ('반려동물 유모차', '개모차', '강아지', '고양이', '냥이', '개', '아지'): (('반려동물 유모차', '개모차', '강아지', '고양이', '냥이', '개', '아지'),)
+    ('반려동물 유모차', '개모차', '강아지', '고양이', '냥이', '개', '아지', '애견'): (('반려동물 유모차', '개모차', '강아지', '고양이', '냥이', '개', '아지', '애견'),)
 }
