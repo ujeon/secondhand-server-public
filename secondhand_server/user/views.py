@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import User
+from .models import User, Favorite
+from crawler.models import Filtered_data
 from django.http import JsonResponse
 import json
 
@@ -56,3 +57,52 @@ def handle_user_signin(request):
             return HttpResponse(JsonResponse(result))
 
     return HttpResponse(status=200)
+
+
+def handle_userinfo(request):
+    request_body = json.loads(request.body)
+
+    result = {}
+    user_data = User.objects.get(id=request_body["user_id"])
+    result["id"] = user_data.__dict__["id"]
+    result["email"] = user_data.__dict__["email"]
+    result["nickname"] = user_data.__dict__["nickname"]
+    result["signup_date"] = user_data.__dict__["signup_date"]
+
+    favorite_data = (
+        Favorite.objects.filter(user=request_body["user_id"])
+        .values("filtered_data_id")
+        .order_by()
+    )
+    result["favorites"] = []
+    for data in favorite_data:
+        filtered_data = Filtered_data.objects.filter(
+            id=data["filtered_data_id"]
+        ).values()
+        for favorite in filtered_data:
+            result["favorites"].append(favorite)
+
+    return HttpResponse(JsonResponse(result))
+
+
+# favorite 리스트에 어떤 데이터를 내려줄지 한 번 다같이 고민해보기
+def handle_user_favorite(request):
+    request_body = json.loads(request.body)
+
+    favorite_data = Favorite.objects.filter(
+        user=request_body["user_id"], filtered_data_id=request_body["list_id"]
+    ).values("user", "filtered_data_id")
+
+    if favorite_data:
+        Favorite.objects.filter(
+            user=request_body["user_id"], filtered_data_id=request_body["list_id"]
+        ).delete()
+    else:
+        new_favorite = Favorite(
+            user=User.objects.get(id=request_body["user_id"]),
+            filtered_data_id=request_body["list_id"],
+        )
+        new_favorite.save()
+
+    return HttpResponse(status=200)
+
