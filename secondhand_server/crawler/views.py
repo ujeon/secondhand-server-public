@@ -9,7 +9,7 @@ from .models import Filtered_data, Average_price, Category
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.core import serializers
-from multiprocessing import Process
+from multiprocessing import Pool
 import json
 
 
@@ -135,13 +135,16 @@ def get_models(request, category, brand):
 
 def multi_crawl_save(request):
     try:
-        bungae_func = Bungae_crawler("유모차")
-        hello_process = Process(target=hello_crawler, args=(45,))
-        daangn_process = Process(target=daangn_crawler, args=(800,))
-        bungae_process = Process(target=bungae_func.data_maker, args=(10000,))
-        hello_process.start()
-        daangn_process.start()
-        bungae_process.start()
+        # bungae_func = Bungae_crawler("유모차")
+        # hello_process = Process(target=hello_crawler, args=(45,))
+        # daangn_process = Process(target=daangn_crawler, args=(800,))
+        # bungae_process = Process(target=bungae_func.data_maker, args=(10000,))
+        # hello_process.start()
+        # daangn_process.start()
+        # bungae_process.start()
+        # hello_crawler(45)
+        daangn_crawler(800)
+        Bungae_crawler(10000)
         return HttpResponse(status=200)
     except Exception as err:
         print(err)
