@@ -55,7 +55,7 @@ def getCoordinate(query):
 def daangn_crawler(page=10):
     # 추후 데이터베이스에서 가져온 카테고리 리스트 사용
     category = ["유모차"]
-    eachItemAddress = {}
+    link_list = []
     filtered_url_list = Filtered_data.objects.filter(market="당근마켓").values_list(
         "url", flat=True
     )
@@ -66,15 +66,15 @@ def daangn_crawler(page=10):
             )
             html = req.text
             soup = BeautifulSoup(html, "html.parser")
-            addressList = []
             for link in soup.select("article > a"):
                 full_link = "https://www.daangn.com" + link.attrs["href"]
-                if full_link not in filtered_url_list:
-                    addressList.append(link.attrs["href"])
-                    eachItemAddress[str(k)] = addressList
+                if (
+                    full_link not in filtered_url_list
+                    and link.attrs["href"] not in link_list
+                ):
+                    link_list.append(link.attrs["href"])
 
-    for page in eachItemAddress:
-        for link in eachItemAddress[page]:
+        for link in link_list:
             req = requests.get(f"https://www.daangn.com{link}")
             html = req.text
             soup = BeautifulSoup(html, "html.parser")
