@@ -10,7 +10,7 @@ urlpatterns = [
     path("allCategories/", views.get_categories),
     path("category/<str:category>/brand/", views.get_brands),
     path("category/<str:category>/brand/<str:brand>/model/", views.get_models),
-    path("input/data/", views.input_bungae_data),
+    path("input/data/", views.multi_crawl_save),
     path("input/filter/", filter_save.retrieve_raw_data),
     path("input/average/", average_price_save.retrieve_filtered_data),
 ]

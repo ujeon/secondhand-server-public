@@ -4,6 +4,7 @@ import time
 import json
 from selenium import webdriver
 from bs4 import BeautifulSoup
+from .raw_data_save import input_crawl_data
 
 
 class Bungae_crawler:
