@@ -9,7 +9,7 @@ from .models import Filtered_data, Average_price, Category
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.core import serializers
-from multiprocessing import Pool
+from multiprocessing import Process
 import json
 
 
@@ -135,10 +135,13 @@ def get_models(request, category, brand):
 
 def multi_crawl_save(request):
     try:
-        pool = Pool(processes=4)  # 4개의 프로세스를 사용합니다.
-        # map()안에 크롤링 함수가 들어감
-        pool.map()
-
+        # bungae_func = Bungae_crawler("유모차")
+        hello_process = Process(target=hello_crawler(1))
+        # daangn_process = Process(target=daangn_crawler())
+        # bungae_process = Process(target=bungae_func())
+        hello_process.start()
+        # daangn_process.start()
+        # bungae_process.start()
         return HttpResponse(status=200)
     except Exception as err:
         print(err)

@@ -29,3 +29,4 @@ def input_crawl_data(data):
         location=data["location"],
     )
     new_data.save()
+    return
