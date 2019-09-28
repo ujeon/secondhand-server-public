@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup
 from urllib import parse
 from django.core.exceptions import ImproperlyConfigured
 from .raw_data_save import input_crawl_data
+from .models import Filtered_data
 
 # 시크릿 키가 담긴 파일 불러오는 함수
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -55,6 +56,9 @@ def daangn_crawler(page=10):
     # 추후 데이터베이스에서 가져온 카테고리 리스트 사용
     category = ["유모차"]
     eachItemAddress = {}
+    filtered_url_list = Filtered_data.objects.filter(market="당근마켓").values_list(
+        "url", flat=True
+    )
     for i in category:
         for k in range(1, page + 1):
             req = requests.get(
@@ -64,10 +68,11 @@ def daangn_crawler(page=10):
             soup = BeautifulSoup(html, "html.parser")
             addressList = []
             for link in soup.select("article > a"):
-                addressList.append(link.attrs["href"])
-                eachItemAddress[str(k)] = addressList
+                full_link = "https://www.daangn.com" + link.attrs["href"]
+                if full_link not in filtered_url_list:
+                    addressList.append(link.attrs["href"])
+                    eachItemAddress[str(k)] = addressList
 
-    result = []
     for page in eachItemAddress:
         for link in eachItemAddress[page]:
             req = requests.get(f"https://www.daangn.com{link}")
@@ -119,6 +124,5 @@ def daangn_crawler(page=10):
                 ]
             else:
                 raw_data["img_url"] = "-"
-            result.append(raw_data)
-    print(result)
-    return result
+            input_crawl_data(raw_data)
+    return print(" 당근마켓 크롤링 완료")
