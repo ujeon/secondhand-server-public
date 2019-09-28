@@ -1,7 +1,6 @@
 from django.urls import path
 
-from . import views
-from . import filter_save
+from . import views, filter_save, average_price_save
 
 urlpatterns = [
     path("eachModelInfo/<str:brand>/<str:model>/info/",
@@ -12,7 +11,8 @@ urlpatterns = [
     path("category/<str:category>/brand/", views.get_brands),
     path("category/<str:category>/brand/<str:brand>/model/", views.get_models),
     path("input/data/", views.input_bungae_data),
-    path("input/filter/", filter_save.retrieve_raw_data)
+    path("input/filter/", filter_save.retrieve_raw_data),
+    path("input/average/", average_price_save.retrieve_filtered_data),
 ]
 
 
