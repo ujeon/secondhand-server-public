@@ -16,6 +16,7 @@ django-cors-headers = "*"
 mysqlclient = "*"
 konlpy = "*"
 pycryptodome = "*"
+authlib = "*"
 
 [requires]
 python_version = "3.7"
