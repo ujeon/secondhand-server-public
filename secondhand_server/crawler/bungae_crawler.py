@@ -5,6 +5,7 @@ import json
 from selenium import webdriver
 from bs4 import BeautifulSoup
 from .raw_data_save import input_crawl_data
+from .models import Filtered_data
 
 
 class Bungae_crawler:
@@ -25,11 +26,13 @@ class Bungae_crawler:
             "/Users/khwi/Downloads/chromedriver", chrome_options=options
         )
 
-        result = []
-
         url = self.lists_url.format(num=count, keyword=self.keyword)
         req_lists = requests.get(url)
         parsed_lists = json.loads(req_lists.text)["list"]
+
+        filtered_url_list = Filtered_data.objects.filter(market="번개장터").values_list(
+            "url", flat=True
+        )
 
         for data in parsed_lists:
             url2 = self.detail_url.format(product_id=data["pid"])
@@ -49,7 +52,8 @@ class Bungae_crawler:
             update_time = update_time.split()[0]
 
             # REVIEW 현재시간을 millisecond로 계산할 수 있도록 하는 함수.
-            def current_milli_time(): return int(round(time.time() * 1000))
+            def current_milli_time():
+                return int(round(time.time() * 1000))
 
             if "시간" in update_time:
                 update_time = update_time.split("시간")[0]
@@ -72,12 +76,11 @@ class Bungae_crawler:
                 time_gap = current_milli_time() - update_time
                 date = datetime.datetime.fromtimestamp(time_gap / 1000.0)
             else:
-                date = datetime.datetime.fromtimestamp(
-                    current_milli_time() / 1000.0)
+                date = datetime.datetime.fromtimestamp(current_milli_time() / 1000.0)
 
             date = date.strftime("%Y-%m-%d")
 
-            temp = {
+            raw_data = {
                 "title": parsed_details["name"],
                 "content": parsed_details["description"],
                 "url": link_url,
@@ -95,6 +98,8 @@ class Bungae_crawler:
                 "is_sold": True if parsed_details["status"] == 3 else False,
                 "category_id": 1,
             }
-            result.append(temp)
+
+            if raw_data["url"] not in filtered_url_list:
+                input_crawl_data(raw_data)
         driver.quit()
-        return result
+        return print("번개장터 크롤링 완료")
