@@ -105,68 +105,72 @@ def hello_crawler(number):
 
     for item_number in item_number_list:
         raw_data = {}
-        driver.get("https://www.hellomarket.com/item/%s" % item_number)
-        html = driver.page_source
-        soup = BeautifulSoup(html, "html.parser")
+        try:
+            driver.get("https://www.hellomarket.com/item/%s" % item_number)
+            html = driver.page_source
+            soup = BeautifulSoup(html, "html.parser")
 
-        raw_data["title"] = soup.select("div.item_info > span")[0].text
-        raw_data["content"] = (
-            soup.select("div.description_text")[
-                0].text.replace("\n", " ").strip()
-        )
-        price_string = soup.select("div.item_price.item_price_bottom")[
-            0].text[:-1]
+            raw_data["title"] = soup.select("div.item_info > span")[0].text
+            raw_data["content"] = (
+                soup.select("div.description_text")[
+                    0].text.replace("\n", " ").strip()
+            )
+            price_string = soup.select("div.item_price.item_price_bottom")[
+                0].text[:-1]
 
-        if price_string.replace(",", "").isdigit():
-            raw_data["price"] = int(price_string.replace(",", ""))
-        else:
-            raw_data["price"] = 0
-        raw_data["url"] = "https://www.hellomarket.com/item/%s" % item_number
-        raw_data["img_url"] = soup.select(
-            "img.view.thumbnail_img")[0].attrs["src"]
-        raw_data["market"] = "헬로마켓"
-        posted_at_text = soup.select("div.item_addr_area > span")[0].text
-        posted_at = ""
-
-        if (
-            posted_at_text.find("분") != -1
-            or posted_at_text.find("시간") != -1
-            or posted_at_text.find("초") != -1
-        ):
-            posted_at = datetime.datetime.now().date()
-        elif posted_at_text.find("일") != -1:
-            day_int = int(posted_at_text.replace("일전", ""))
-            posted_at = datetime.date.today() - datetime.timedelta(days=day_int)
-        else:
-            reg_exr = re.compile(r"[0-9]*\d\b")
-            num = reg_exr.findall(posted_at_text)
-            date_string = "2019-"
-            if len(num[0]) == 1:
-                date_string = date_string + "0" + num[0] + "-" + num[1]
-                posted_at = datetime.datetime.strptime(
-                    date_string, "%Y-%m-%d").date()
+            if price_string.replace(",", "").isdigit():
+                raw_data["price"] = int(price_string.replace(",", ""))
             else:
-                date_string = date_string + num[0] + "-" + num[1]
-                posted_at = datetime.datetime.strptime(
-                    date_string, "%Y-%m-%d").date()
-        raw_data["posted_at"] = posted_at
-        raw_data["is_sold"] = False
-        raw_data["category_id"] = 1
-        # FIXED 데이터 베이스에 location이 필수로 되어 있습니다. 수정할게요
-        location = ""
-        location_string = soup.select("div.item_addr_area > span")[1].text
-        if location_string == "판매자가 위치를 지정하지 않았습니다.":
-            location = "-"  # None => "-"
-        else:
-            location = getCoordinate(location_string)
-        raw_data["location"] = location
+                raw_data["price"] = 0
+            raw_data["url"] = "https://www.hellomarket.com/item/%s" % item_number
+            raw_data["img_url"] = soup.select(
+                "img.view.thumbnail_img")[0].attrs["src"]
+            raw_data["market"] = "헬로마켓"
+            posted_at_text = soup.select("div.item_addr_area > span")[0].text
+            posted_at = ""
 
-        if raw_data["url"] not in url_list:
-            input_crawl_data(raw_data)
-            print('크롤링 중')
-        else:
-            print('크롤링 완료')
-            return
+            if (
+                posted_at_text.find("분") != -1
+                or posted_at_text.find("시간") != -1
+                or posted_at_text.find("초") != -1
+            ):
+                posted_at = datetime.datetime.now().date()
+            elif posted_at_text.find("일") != -1:
+                day_int = int(posted_at_text.replace("일전", ""))
+                posted_at = datetime.date.today() - datetime.timedelta(days=day_int)
+            else:
+                reg_exr = re.compile(r"[0-9]*\d\b")
+                num = reg_exr.findall(posted_at_text)
+                date_string = "2019-"
+                if len(num[0]) == 1:
+                    date_string = date_string + "0" + num[0] + "-" + num[1]
+                    posted_at = datetime.datetime.strptime(
+                        date_string, "%Y-%m-%d").date()
+                else:
+                    date_string = date_string + num[0] + "-" + num[1]
+                    posted_at = datetime.datetime.strptime(
+                        date_string, "%Y-%m-%d").date()
+            raw_data["posted_at"] = posted_at
+            raw_data["is_sold"] = False
+            raw_data["category_id"] = 1
+            # FIXED 데이터 베이스에 location이 필수로 되어 있습니다. 수정할게요
+            location = ""
+            location_string = soup.select("div.item_addr_area > span")[1].text
+            if location_string == "판매자가 위치를 지정하지 않았습니다.":
+                location = "-"  # None => "-"
+            else:
+                location = getCoordinate(location_string)
+            raw_data["location"] = location
+
+            if raw_data["url"] not in url_list:
+                input_crawl_data(raw_data)
+                print('크롤링 중')
+            else:
+                print('크롤링 완료')
+                return
+        except Exception as err:
+            print(err)
+            pass
         # json_type_text.append(raw_data)
 
     driver.quit()
