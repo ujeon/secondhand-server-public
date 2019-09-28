@@ -9,6 +9,7 @@ import re
 import json
 import requests
 import os
+from .raw_data_save import input_crawl_data
 
 # 시크릿 키가 담긴 파일 불러오는 함수
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
