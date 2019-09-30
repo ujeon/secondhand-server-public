@@ -1,12 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import User, Favorite
-
+from .jwt_auth import token_generator, decode_token
 
 from crawler.models import Filtered_data
 from django.http import JsonResponse
 import json
-import os
 import time
 
 
@@ -14,28 +13,6 @@ from .encrypt import AESCipher
 from django.db.models import Q
 from django.utils import timezone
 from authlib.jose import jwt
-
-
-from django.core.exceptions import ImproperlyConfigured
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-secret_file = os.path.join(BASE_DIR, "secret.json")
-
-
-with open(secret_file) as f:
-    secret = json.loads(f.read())
-
-
-def get_secret(setting, secret=secret):
-    try:
-        return secret[setting]
-    except:
-        error_msg = "Set key '{0}' in secret.json".format(setting)
-        raise ImproperlyConfigured(error_msg)
-
-
-SECRET_JWT = get_secret("SECRET_JWT")
 
 
 def handle_user_signup(request):
@@ -80,24 +57,16 @@ def handle_user_signin(request):
         hashed_pwd = AESCipher().decrypt_str(data["password"])
         if data["email"] != request_body["email"]:
             result["message"] = "이메일 주소가 일치하지 않습니다."
-            return HttpResponse(JsonResponse(result))
+            return HttpResponse(JsonResponse(result), status=403)
         elif hashed_pwd != request_body["password"]:
             result["message"] = "비밀번호가 일치하지 않습니다."
-            return HttpResponse(JsonResponse(result))
+            return HttpResponse(JsonResponse(result), status=403)
         elif (
             data["email"] == request_body["email"]
             and hashed_pwd == request_body["password"]
         ):
-            header = {"alg": "HS256", "typ": "JWT"}
-            payload = {
-                "iss": "jellyfish",
-                "exp": 3000000,
-                "iat": int(round(time.time() * 1000)),
-                "user_id": data["id"],
-            }
+            token = token_generator("user_id", data["id"])
 
-            secret_JWT = SECRET_JWT
-            token = jwt.encode(header, payload, secret_JWT)
             response = HttpResponse(status=200)
             response["token"] = token
 
@@ -106,14 +75,13 @@ def handle_user_signin(request):
 
 def handle_userinfo(request):
     request_body = json.loads(request.body)
-
-    claims = jwt.decode(request.headers["token"], SECRET_JWT)
+    token = request.headers["token"]
+    claims = decode_token(token)
     user_id = claims["user_id"]
 
     user = User.objects.get(id=user_id)
 
     if user:
-
         result = {}
         user_data = User.objects.get(id=request_body["user_id"])
         result["id"] = user_data.__dict__["id"]
@@ -134,10 +102,9 @@ def handle_userinfo(request):
             for favorite in filtered_data:
                 result["favorites"].append(favorite)
 
-        return HttpResponse(JsonResponse(result))
-
+        return HttpResponse(JsonResponse(result), status=200)
     else:
-        return HttpResponse(status=404)
+        return HttpResponse(status=403)
 
 
 # favorite 리스트에 어떤 데이터를 내려줄지 한 번 다같이 고민해보기
@@ -160,4 +127,3 @@ def handle_user_favorite(request):
         new_favorite.save()
 
     return HttpResponse(status=200)
-
