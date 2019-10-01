@@ -135,7 +135,7 @@ def get_models(request, category, brand):
 
 def multi_crawl_save(request):
     try:
-        # bungae_func = Bungae_crawler("유모차")
+        bungae_func = Bungae_crawler("유모차")
         # hello_process = Process(target=hello_crawler, args=(45,))
         # daangn_process = Process(target=daangn_crawler, args=(800,))
         # bungae_process = Process(target=bungae_func.data_maker, args=(10000,))
@@ -143,8 +143,12 @@ def multi_crawl_save(request):
         # daangn_process.start()
         # bungae_process.start()
         # hello_crawler(45)
-        daangn_crawler(800)
-        Bungae_crawler(10000)
+        # pool = Pool(processes=4)
+        # target_list = [5000, ]
+        # pool.map(bungae_func.data_maker, target_list)
+        bungae_func.data_maker(1000)
+
+        # Bungae_crawler(10000)
         return HttpResponse(status=200)
     except Exception as err:
         print(err)

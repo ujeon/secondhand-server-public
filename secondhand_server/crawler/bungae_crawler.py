@@ -35,71 +35,77 @@ class Bungae_crawler:
         )
 
         for data in parsed_lists:
-            url2 = self.detail_url.format(product_id=data["pid"])
-            link_url = self.link_url.format(
-                product_id=data["pid"], keyword=self.keyword
-            )
-            req_detail = requests.get(url2)
-            parsed_details = json.loads(req_detail.text)["item_info"]
+            try:
+                url2 = self.detail_url.format(product_id=data["pid"])
+                link_url = self.link_url.format(
+                    product_id=data["pid"], keyword=self.keyword
+                )
+                req_detail = requests.get(url2)
+                parsed_details = json.loads(req_detail.text)["item_info"]
 
-            driver.get(link_url)
+                driver.get(link_url)
 
-            html = driver.page_source
-            soup = BeautifulSoup(html, "html.parser")
+                html = driver.page_source
+                soup = BeautifulSoup(html, "html.parser")
 
-            # REVIEW 게시글 업데이트 시간을 HTML 엘리먼트에서 가져와서 해당 시간 데이터 처리
-            update_time = soup.find("span", {"class": "text-time"}).text
-            update_time = update_time.split()[0]
+                # REVIEW 게시글 업데이트 시간을 HTML 엘리먼트에서 가져와서 해당 시간 데이터 처리
+                update_time = soup.find("span", {"class": "text-time"}).text
+                update_time = update_time.split()[0]
 
-            # REVIEW 현재시간을 millisecond로 계산할 수 있도록 하는 함수.
-            def current_milli_time():
-                return int(round(time.time() * 1000))
+                # REVIEW 현재시간을 millisecond로 계산할 수 있도록 하는 함수.
+                def current_milli_time():
+                    return int(round(time.time() * 1000))
 
-            if "시간" in update_time:
-                update_time = update_time.split("시간")[0]
-                update_time = int(update_time) * 3600000
-                time_gap = current_milli_time() - update_time
-                date = datetime.datetime.fromtimestamp(time_gap / 1000.0)
-            elif "일" in update_time:
-                update_time = update_time.split("일")[0]
-                update_time = int(update_time) * 86400000
-                time_gap = current_milli_time() - update_time
-                date = datetime.datetime.fromtimestamp(time_gap / 1000.0)
-            elif "주" in update_time:
-                update_time = update_time.split("주")[0]
-                update_time = int(update_time) * 604800000
-                time_gap = current_milli_time() - update_time
-                date = datetime.datetime.fromtimestamp(time_gap / 1000.0)
-            elif "달" in update_time:
-                update_time = update_time.split("달")[0]
-                update_time = int(update_time) * 604800000 * 4
-                time_gap = current_milli_time() - update_time
-                date = datetime.datetime.fromtimestamp(time_gap / 1000.0)
-            else:
-                date = datetime.datetime.fromtimestamp(current_milli_time() / 1000.0)
+                if "시간" in update_time:
+                    update_time = update_time.split("시간")[0]
+                    update_time = int(update_time) * 3600000
+                    time_gap = current_milli_time() - update_time
+                    date = datetime.datetime.fromtimestamp(time_gap / 1000.0)
+                elif "일" in update_time:
+                    update_time = update_time.split("일")[0]
+                    update_time = int(update_time) * 86400000
+                    time_gap = current_milli_time() - update_time
+                    date = datetime.datetime.fromtimestamp(time_gap / 1000.0)
+                elif "주" in update_time:
+                    update_time = update_time.split("주")[0]
+                    update_time = int(update_time) * 604800000
+                    time_gap = current_milli_time() - update_time
+                    date = datetime.datetime.fromtimestamp(time_gap / 1000.0)
+                elif "달" in update_time:
+                    update_time = update_time.split("달")[0]
+                    update_time = int(update_time) * 604800000 * 4
+                    time_gap = current_milli_time() - update_time
+                    date = datetime.datetime.fromtimestamp(time_gap / 1000.0)
+                else:
+                    date = datetime.datetime.fromtimestamp(
+                        current_milli_time() / 1000.0)
 
-            date = date.strftime("%Y-%m-%d")
+                date = date.strftime("%Y-%m-%d")
 
-            raw_data = {
-                "title": parsed_details["name"],
-                "content": parsed_details["description"],
-                "url": link_url,
-                "img_url": parsed_details["product_image"]
-                if parsed_details["product_image"] != ""
-                else "-",
-                "price": parsed_details["price"],
-                "location": parsed_details["latitude"]
-                + "-"
-                + parsed_details["longitude"]
-                if parsed_details["latitude"] != ""
-                else "-",
-                "market": "번개장터",
-                "posted_at": date,
-                "is_sold": True if parsed_details["status"] == 3 else False,
-                "category_id": 1,
-            }
+                raw_data = {
+                    "title": parsed_details["name"],
+                    "content": parsed_details["description"],
+                    "url": link_url,
+                    "img_url": parsed_details["product_image"]
+                    if parsed_details["product_image"] != ""
+                    else "-",
+                    "price": parsed_details["price"],
+                    "location": parsed_details["latitude"]
+                    + "-"
+                    + parsed_details["longitude"]
+                    if parsed_details["latitude"] != ""
+                    else "-",
+                    "market": "번개장터",
+                    "posted_at": date,
+                    "is_sold": True if parsed_details["status"] == 3 else False,
+                    "category_id": 1,
+                }
 
-            if raw_data["url"] not in filtered_url_list:
-                input_crawl_data(raw_data)
+                if raw_data["url"] not in filtered_url_list:
+                    input_crawl_data(raw_data)
+            except Exception as err:
+                print(err)
+                pass
+
         driver.quit()
         return print("번개장터 크롤링 완료")
