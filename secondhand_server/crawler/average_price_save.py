@@ -33,10 +33,17 @@ def retrieve_filtered_data(request):
         Filtered_data.objects.exclude(model="etc")
         .values_list("posted_at", flat=True).distinct()
     )
+    data_set_by_average_model = (
+        Average_price.objects.values_list("model", flat=True)
+    )
+    data_set_by_average_date = (
+        Average_price.objects.values_list("date", flat=True)
+    )
     for models in data_set_by_model:
         for date in data_set_by_date:
-            filtered_data = Filtered_data.objects.filter(
-                model=models, posted_at=date)
-            average_price_data = average_price_func(filtered_data)
-            input_fitered_data(average_price_data)
+            if (models not in data_set_by_average_model) or (date not in data_set_by_average_date):
+                filtered_data = Filtered_data.objects.filter(
+                    model=models, posted_at=date)
+                average_price_data = average_price_func(filtered_data)
+                input_fitered_data(average_price_data)
     return HttpResponse(status=200)
