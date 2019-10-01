@@ -60,7 +60,7 @@ def daangn_crawler(page=10):
         "url", flat=True
     )
     for i in category:
-        for k in range(1, page + 1):
+        for k in range(700, page + 1):
             req = requests.get(
                 f"https://www.daangn.com/search/{i}/more/flea_market?page={k}"
             )
@@ -75,54 +75,58 @@ def daangn_crawler(page=10):
                     link_list.append(link.attrs["href"])
 
         for link in link_list:
-            req = requests.get(f"https://www.daangn.com{link}")
-            html = req.text
-            soup = BeautifulSoup(html, "html.parser")
+            try:
+                req = requests.get(f"https://www.daangn.com{link}")
+                html = req.text
+                soup = BeautifulSoup(html, "html.parser")
 
-            raw_data = {
-                "title": soup.select("#article-title")[0].text,
-                "content": soup.select("#article-detail")[0]
-                .text.replace("\n", " ")
-                .strip(),
-                "url": f"https://www.daangn.com{link}",
-                "market": "당근마켓",
-                "is_sold": False,
-                "category_id": 1,
-            }
+                raw_data = {
+                    "title": soup.select("#article-title")[0].text,
+                    "content": soup.select("#article-detail")[0]
+                    .text.replace("\n", " ")
+                    .strip(),
+                    "url": f"https://www.daangn.com{link}",
+                    "market": "당근마켓",
+                    "is_sold": False,
+                    "category_id": 1,
+                }
 
-            location = getCoordinate(soup.select("#region-name")[0].text)
-            raw_data["location"] = location
+                location = getCoordinate(soup.select("#region-name")[0].text)
+                raw_data["location"] = location
 
-            dateCheck = soup.select("#article-category > time")[0].text
-            if ("일" in dateCheck) == False:
-                raw_data["posted_at"] = datetime.datetime.now().date()
-            else:
-                postedAt = soup.select("#article-category > time")[0].text.replace(
-                    "일 전", ""
-                )
-                raw_data["posted_at"] = (
-                    datetime.date.today() - datetime.timedelta(days=int(postedAt))
-                ).strftime("%Y-%m-%d")
+                dateCheck = soup.select("#article-category > time")[0].text
+                if ("일" in dateCheck) == False:
+                    raw_data["posted_at"] = datetime.datetime.now().date()
+                else:
+                    postedAt = soup.select("#article-category > time")[0].text.replace(
+                        "일 전", ""
+                    )
+                    raw_data["posted_at"] = (
+                        datetime.date.today() - datetime.timedelta(days=int(postedAt))
+                    ).strftime("%Y-%m-%d")
 
-            if (
-                len(soup.select("#article-price")) == 0
-                or soup.select("#article-price")[0].text.replace("\n", "").strip()[-1]
-                != "원"
-            ):
-                raw_data["price"] = 0
-            else:
-                price = soup.select("#article-price")[0].text
-                toBeReplaces = ["\n", "원", ","]
-                for el in toBeReplaces:
-                    if el in price:
-                        price = price.replace(el, "")
-                raw_data["price"] = int(price.strip())
+                if (
+                    len(soup.select("#article-price")) == 0
+                    or soup.select("#article-price")[0].text.replace("\n", "").strip()[-1]
+                    != "원"
+                ):
+                    raw_data["price"] = 0
+                else:
+                    price = soup.select("#article-price")[0].text
+                    toBeReplaces = ["\n", "원", ","]
+                    for el in toBeReplaces:
+                        if el in price:
+                            price = price.replace(el, "")
+                    raw_data["price"] = int(price.strip())
 
-            if len(soup.select("div.image-wrap > img")) > 0:
-                raw_data["img_url"] = soup.select("div.image-wrap > img")[0].attrs[
-                    "data-lazy"
-                ]
-            else:
-                raw_data["img_url"] = "-"
-            input_crawl_data(raw_data)
+                if len(soup.select("div.image-wrap > img")) > 0:
+                    raw_data["img_url"] = soup.select("div.image-wrap > img")[0].attrs[
+                        "data-lazy"
+                    ]
+                else:
+                    raw_data["img_url"] = "-"
+                input_crawl_data(raw_data)
+            except Exception as err:
+                print(err)
+                pass
     return print(" 당근마켓 크롤링 완료")
