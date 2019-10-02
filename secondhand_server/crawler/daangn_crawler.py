@@ -60,7 +60,7 @@ def daangn_crawler(page=10):
         "url", flat=True
     )
     for i in category:
-        for k in range(700, page + 1):
+        for k in range(1, page + 1):
             req = requests.get(
                 f"https://www.daangn.com/search/{i}/more/flea_market?page={k}"
             )
