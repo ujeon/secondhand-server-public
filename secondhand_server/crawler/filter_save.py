@@ -22,12 +22,12 @@ def input_fitered_data(data):
         return HttpResponse(status=200)
         # TOFIX: 어떤 에러인지 확인이 아래 코드로 가능합니다
     except Exception as ex:
-        print('이것이 에러다!', ex)
+        print('오류', ex)
         return HttpResponse(status=500)
 
 
 # DB에서 raw data를 불러오는 함수
-def retrieve_raw_data(request):
+def retrieve_raw_data():
     data_set = Raw_data.objects.filter(
         price__gte=20000).values('title', 'content', 'price', 'url', 'img_url', 'market', 'posted_at', 'is_sold', 'location', 'category_id').order_by('url').distinct()
 
@@ -36,4 +36,4 @@ def retrieve_raw_data(request):
             filtered_data = filter_func(data)
             input_fitered_data(filtered_data)
 
-    return HttpResponse(status=200)
+    return
