@@ -4,7 +4,6 @@ from .average_price_func import average_price_func
 
 
 def input_fitered_data(data):
-    # REVIEW: 데이터를 크롤링 하고 DB에 저장합니다. 실패하면 except로 넘어갑니다.
     try:
         new_data = Average_price(
             brand=data["brand"],
@@ -17,14 +16,13 @@ def input_fitered_data(data):
         )
         new_data.save()
         return HttpResponse(status=200)
-        # TOFIX: 어떤 에러인지 확인이 아래 코드로 가능합니다
     except Exception as ex:
-        print("이것이 에러다!", ex)
+        print("정상 작동중이니 당황하지 마세요", ex)
         return HttpResponse(status=500)
 
 
 # DB에서 filtered data를 불러오는 함수
-def retrieve_filtered_data(request):
+def retrieve_filtered_data():
     data_set_by_model = (
         Filtered_data.objects.exclude(model="etc")
         .values_list("model", flat=True).distinct()
@@ -46,4 +44,4 @@ def retrieve_filtered_data(request):
                     model=models, posted_at=date)
                 average_price_data = average_price_func(filtered_data)
                 input_fitered_data(average_price_data)
-    return HttpResponse(status=200)
+    return

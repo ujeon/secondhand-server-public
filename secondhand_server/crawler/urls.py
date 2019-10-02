@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import views, filter_save, average_price_save, average_price_monthly
+from . import views, filter_save, average_price_save, average_price_monthly, hook_test
 
 urlpatterns = [
     path("<str:brand>/<str:model>/info/",
@@ -10,10 +10,11 @@ urlpatterns = [
     path("category/", views.get_categories),
     path("category/<str:category>/brand/", views.get_brands),
     path("category/<str:category>/<str:brand>/model/", views.get_models),
-    path("input/data/", views.multi_crawl_save),
-    path("input/filter/", filter_save.retrieve_raw_data),
-    path("input/average/", average_price_save.retrieve_filtered_data),
     path("average/monthly/", average_price_monthly.average_price_monthly),
+    # path("input/data/", views.multi_crawl_save),
+    # path("input/filter/", filter_save.retrieve_raw_data),
+    # path("input/average/", average_price_save.retrieve_filtered_data),
+    path("save_auto/", views.save_all_auto)
 ]
 
 
