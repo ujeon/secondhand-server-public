@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import views, filter_save, average_price_save, average_price_monthly, hook_test
+from . import views, filter_save, average_price_save, average_price_monthly
 
 urlpatterns = [
     path("<str:brand>/<str:model>/info/",
