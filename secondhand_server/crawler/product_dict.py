@@ -1,15 +1,15 @@
 stroller_dictionary = {
-    ('RYAN', '리안'): (('VEGA', '베가', '배가'), ('SPIN', '스핀', '스핀DX', '스핀LX', '스핀로얄'), ('SOLO', '솔로', '솔로LX', '쏠로'), ('CRUISE4S', '크루즈4S', '크루즈', 'CRUISE', '4S'), ('GALAXY', '갤럭시', '겔럭시'), ('PRIME LIGHT', 'PRIMELIGHT', '프라임라이트', '프라임라이트오토폴딩', '오토폴딩', '프라임라이트골드에스션', '골드에디션', '골드', '골드애디션', 'PRIMERIGHT'), ('RACOON', '라쿤'), ('GOLF', '골프'), ('POCHE', '포쉐', '포셰', '포세', '포새'), ('LEO', '래오', '레오'), ('GRAM+', '그램플러스', 'GRAM', '그렘플러스', '그램', '그렘', 'R', 'GRAMPLUS', '블랙에디션', '블랙애디션'), ('TWIN', '트윈')),
+    ('RYAN', '리안'): (('VEGA', '베가', '배가'), ('SPIN', '스핀', '스핀DX', '스핀LX', '스핀로얄'), ('SOLO', '솔로', '솔로LX', '쏠로'), ('CRUISE4S', '크루즈4S', '크루즈', 'CRUISE', '4S'), ('GALAXY', '갤럭시', '겔럭시'), ('PRIME LIGHT', 'PRIMELIGHT', '프라임라이트', '프라임라이트오토폴딩', '오토폴딩', '프라임라이트골드에스션', '골드에디션', '골드애디션', 'PRIMERIGHT'), ('RACOON', '라쿤'), ('GOLF', '골프'), ('POCHE', '포쉐', '포셰', '포세', '포새'), ('LEO', '래오', '레오'), ('GRAM+', '그램플러스', 'GRAM', '그렘플러스', '그렘', 'GRAMPLUS', '블랙에디션', '블랙애디션')),
     ('STOKKE', 'STOKE', '스토케', '스토캐'): (('TRAILZ', 'TRAILS', '트레일즈', '트레일스', '트래일즈', '트래일스'), ('IZIGO', '이지고', 'EZGO', 'EASYGO'), ('SCOOT', '스쿠트'), ('XPLORY', 'EXPLORY', '익스플로리', '엑스플로리', '익스플로러', '엑스플로러')),
-    ('FEDORA', 'PEDORA', '페도라', '패도라'): (('X1CARBON', 'X1', 'CARBON', 'X1카본', '카본', '엑스1카본', '액스1카본', '엑스1CARBON'), ('L2MAX', 'L2', '엘2', '엘투', '앨2', '앨투'), ('L4', '엘4', '앨4'), ('L1 MAGIC', 'L1', '엘1', '앨1', 'L1MAGIC'), ('S5+', 'S5플러스', '에스5', '에스5플러스', '애스5', '애스5플러스'), ('S1+', 'S1플러스', 'S1', '에스1플러스', '애스1플러스', '에스1', '애스1'), ('T2', '티2')),
-    ('INGLESINA', '잉글레시나', '잉글래시나', '잉글레시니', '잉글래시니', 'ENGLESINA'): (('APTICA', '앱티카', '엡티카'), ('TRILOGY', 'TRILOGYPLUS', '트릴로지', '트릴로지플러스'), ('CLASIC', '클래식', '클레식'), ('ZIPPYLIGHT', 'ZIPPY', '지피', '지피라이트'), ('QUID', '퀴드')),
+    ('FEDORA', 'PEDORA', '페도라', '패도라'): (('X1CARBON', 'X1', 'CARBON', 'X1카본', '엑스1카본', '액스1카본', '엑스1CARBON'), ('L2MAX', 'L2', '엘2', '엘투', '앨2', '앨투'), ('L4', '엘4', '앨4'), ('L1 MAGIC', 'L1', '엘1', '앨1', 'L1MAGIC'), ('S5+', 'S5플러스', '에스5', '에스5플러스', '애스5', '애스5플러스'), ('S1+', 'S1플러스', 'S1', '에스1플러스', '애스1플러스', '에스1', '애스1'), ('T2', '티2')),
+    ('INGLESINA', '잉글레시나', '잉글래시나', '잉글레시니', '잉글래시니', 'ENGLESINA'): (('APTICA', '앱티카', '엡티카'), ('TRILOGY', 'TRILOGYPLUS', '트릴로지', '트릴로지플러스'), ('CLASSICA', '클래시카', '클레시카', '클래식카'), ('ZIPPYLIGHT', 'ZIPPY', '지피', '지피라이트'), ('QUID', '퀴드')),
     ('TAVO', '타보'): (('BASICSTEP', '베이직스텝'), ('INNOSPIN', '이노스핀'), ('SELLA', '셀라', '샐라'), ('REVOLUTION', '레볼루션', '래볼루션'), ('REVOPRIME', '레보프라임', '래보프라임')),
     ('BOOGABOO', '부가부'): (('ANT', '앤트', '엔트'), ('DONKEY2', '동키2', '동키2모노', '동키2모노', '동키2듀오', '동키2트윈', '동키'), ('RUNNER', '러너'), ('BEE5', 'BEE', '비5'), ('CAMELEON', 'CAMELEON3', '카멜레온', '카멜레온3'), ('FOX', '폭스')),
     ('CYBEX', '싸이벡스', '싸이백스'): (('PRIAM', '프리암'), ('MIOS', '미오스'), ('MARIS', 'MARIS2', '마리스2', '마리스'), ('POKIT', '포킷', 'POKITPLUS', '포킷플러스')),
     ('MCLAREN', '맥라렌', '멕라렌', '맥라랜', '멕라랜', '맥클라렌', '맥클라랜', '멕클라렌', '멕클라랜'): (('QUESTSPORT', '퀘스트스포츠', 'QUEST'), ('TECHNO XLR', 'TECHNO', 'XLR', '테크노', '테크노XLR'), ('QUESTa', 'QUEST', 'QUESTALPHA', '퀘스트', '퀘스트알파')),
     ('QUINNY', '퀴니'): (('MOODD', 'MOOD', '무드', '무드3', 'MOOD3', 'MOODD3'), ('HUBB', 'HUB', '허브'), ('YEZZ', 'YEZZ3.0', 'YEZZ3', '예츠', '예츠3', '예츠3.0'), ('BUZZ', '버즈'), ('ZAPP', '제프', '제프엑스트라', '제프플렉스', 'ZAPPX', '제프X')),
     ('Y-UP', 'YUP', '와이업'): (('GENIE', '지니', '올뉴지니'), ('ROYAL', '로얄')),
-    ('COMBI', '콤비'): (('NEMURIE', '네무리에'), ('URBAN WALKER', 'URBAN', 'WALKER', '어번워커', '어번워커라이트', '어번', '워커'), ('WELL COMFORT', 'WELLCOMFORT', '웰컴포트', '웰컴포트플러스', 'COMFORT', 'WELL'), ('F2', 'F2PLUS', 'F2AIR', 'F2AIRLIGHT', '에프2', '에프2플러스', '에프2에어')),
+    ('COMBI', '콤비'): (('NEMURIE', '네무리에'), ('URBAN WALKER', 'URBAN', 'WALKER', '어번워커', '어번워커라이트'), ('WELL COMFORT', 'WELLCOMFORT', '웰컴포트', '웰컴포트플러스', 'COMFORT'), ('F2', 'F2PLUS', 'F2AIR', 'F2AIRLIGHT', '에프2', '에프2플러스', '에프2에어')),
     ('MIMA', '미마'): (('XARI', '자리', '미마자리'), ('ZIGI', '지기', '미마지기')),
     ('EASYWALKER', '이지워커'): (('HARVEY', '하비'), ('CHARLEY', '찰리'), ('MINI BUGGY', '미니버기', '미니버기XL', '미니버기XS', '버기', 'BUGGY')),
     ('JOOVY', '쥬비', '주비'): (('COOPER', '쿠퍼'), ('BALOON', '벌룬')),
@@ -21,7 +21,7 @@ stroller_dictionary = {
         ("LENI", "LANI", "LENY", "레니", "래니", "LENITWIN", "LANITWIN", "LENYTWIN",
          "LENI트윈", "LANI트윈", "LENY트윈", "레니TWIN", "래니TWIN", "레니트윈", "래니트윈"),
         ("TEEKMINI", "TICKMINI", "티크MINI", "TEEK미니", "티크미니"),
-        ("MEEK", "MICK", "미크", "믹"),
+        ("MEEK", "MICK", "미크"),
         ("WINGS", "WINGSALPHA", "WINGSALFA", "WINGS알파", "WINGSLITE", "WINGSLIGHT", "WINGS라이트", "WINGSS", "WINGS에스", "WINGS애스", "WINGSSFOURSEASONS", "WINGSS4시즌스", "WINGSS포시즌스", "WINGS에스포시즌스", "WINGSPLUS", "WINGS플러스", "WINGSPLUSFOURROLLING", "WINGS플러스포롤링", "WINGS플러스4롤링", "WINGSPLUS4ROLLING", "WINGSPLUS4롤링", "윙스", "윙즈", "윙스알파", "윙스라이트", "윙스S", "윙스S포시즌스", "윙스플러스", "윙스플러스4롤링", "윙스ALPHA", "윙스ALFA", "윙스LITE", "윙스LIGHT", "윙스에스",
          "윙스S4시즌스", "윙스SFOURSEASONS", "윙스S4SEASONS", "윙스에스4SEASONS", "윙스에스FOURSEASONS", "윙스PLUS", "윙스PLUS4ROLLING", "윙스플러스4ROLLING", "윙스플러스포ROLLING", "윙스PLUS4롤링", "윙즈알파", "윙즈라이트", "윙즈S", "윙즈S포시즌스", "윙즈플러스", "윙즈플러스4롤링", "윙즈ALPHA", "윙즈ALFA", "윙즈LITE", "윙즈LIGHT", "윙즈에스", "윙즈S4시즌스", "윙즈SFOURSEASONS", "윙즈S4SEASONS", "윙즈에스4SEASONS", "윙즈에스FOURSEASONS", "윙즈PLUS", "윙즈PLUS4ROLLING", "윙즈플러스4ROLLING", "윙즈플러스포ROLLING", "윙즈PLUS4롤링"),
         ("CROWN", "CRAWN", "크라운", "크라운에스", "크라운플러스", "CROWNS",
@@ -47,8 +47,8 @@ stroller_dictionary = {
     (("BOOK51", "북51"), ("BOOKS", "북S"), ('SKATE', '스케이트', '스캐이트'), ('VELA', '벨라', '밸라', 'BELA'), ('PLIKOMINI', 'PLICOMINI', "FLICOMINI", "플리코미니", "폴리코미니"),
      ('PLIKOMINIGHIRO', 'PLICOMINIGHIRO', "FLICOMINIGHIRO", "플리코미니지로", "폴리코미니지로"), ("BOOKFORTWO", "북포투"), ("ARIASHOPPERTWIN", "아리아쇼퍼트윈"), ("DUET", "듀엣")),
     ('AVALON', 'ABALON', '아발론'):
-    (("SUPERSLIM", "수퍼슬림", "슈퍼슬림"), ("CARRYON", "CARRYONLIGHT", "캐리언라이트", "케리언라이트", "캐리온라이트", "케리온라이트", "캐리언", "케리언", "캐리온", "케리온", "라이트"),
-     ("ISLIDE", "아이슬라이드"), ("SUPERLIGHT", "슈퍼라이트플러스", "수퍼라이트플러스", "슈퍼라이트", "수퍼라이트", "플러스"), ("GIGGLE", "지글"), ("AVON", "에이번", "애이번", "에이번디럭스")),
+    (("SUPERSLIM", "수퍼슬림", "슈퍼슬림"), ("CARRYON", "CARRYONLIGHT", "캐리언라이트", "케리언라이트", "캐리온라이트", "케리온라이트", "캐리언", "케리언", "캐리온", "케리온"),
+     ("ISLIDE", "아이슬라이드"), ("SUPERLIGHT", "슈퍼라이트플러스", "수퍼라이트플러스", "슈퍼라이트", "수퍼라이트"), ("GIGGLE", "지글"), ("AVON", "에이번", "애이번", "에이번디럭스")),
     ('JOOVY', '쥬비', '주비'):
     (("CABOOSE", "카부스", "ULTRALIGHT", "카부스울트라라이트", "카부스울트라라이트그라파이트", "울트라라이트", "그라파이트"),
      ("BALLOON", "벌룬", "발룬")),
@@ -58,5 +58,5 @@ stroller_dictionary = {
 }
 
 pet_dictionary = {
-    ('반려동물 유모차', '개모차', '강아지', '고양이', '냥이', '개', '아지', '애견'): (('반려동물 유모차', '개모차', '강아지', '고양이', '냥이', '개', '아지', '애견'),)
+    ('반려동물 유모차', '개모차', '강아지', '고양이', '야옹이', '애견'): (('반려동물 유모차', '개모차', '강아지', '고양이', '애견', '야옹이'),)
 }

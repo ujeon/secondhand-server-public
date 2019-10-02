@@ -29,10 +29,11 @@ def input_fitered_data(data):
 # DB에서 raw data를 불러오는 함수
 def retrieve_raw_data(request):
     data_set = Raw_data.objects.filter(
-        price__gt=0
-    )
+        price__gte=20000).values('title', 'content', 'price', 'url', 'img_url', 'market', 'posted_at', 'is_sold', 'location', 'category_id').order_by('url').distinct()
+
     for data in data_set:
-        if data.price % 1000 == 0:
+        if data["price"] % 1000 == 0:
             filtered_data = filter_func(data)
             input_fitered_data(filtered_data)
+
     return HttpResponse(status=200)

@@ -33,14 +33,14 @@ def brandAndModelIsNotInData(data):
 
 def filter_func(data):
     filtered_data = {
-        "price": data.price,
-        "url": data.url,
-        "img_url": data.img_url,
-        "market": data.market,
-        "posted_at": data.posted_at,
-        "is_sold": data.is_sold,
-        "category_id": data.category_id,
-        "location": data.location,
+        "price": data['price'],
+        "url": data['url'],
+        "img_url": data['img_url'],
+        "market": data['market'],
+        "posted_at": data['posted_at'],
+        "is_sold": data['is_sold'],
+        "category_id": data['category_id'],
+        "location": data['location'],
     }
 
     def matchBrandAndModel(list, brandAndModel):
@@ -61,10 +61,10 @@ def filter_func(data):
                             filtered_data["model"] = model[0]
                             break
 
-    title = makeUsefulList(data.title)
+    title = makeUsefulList(data['title'])
     matchBrandAndModel(title, stroller_dictionary)
     if brandAndModelIsNotInData(filtered_data):
-        content = makeUsefulList(data.content)
+        content = makeUsefulList(data['content'])
         matchBrandAndModel(content, stroller_dictionary)
         if brandAndModelIsNotInData(filtered_data):
             titleList = konlpy_filter(" ".join(title))

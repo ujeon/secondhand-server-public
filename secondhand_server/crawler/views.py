@@ -146,7 +146,9 @@ def multi_crawl_save(request):
         # pool = Pool(processes=4)
         # target_list = [5000, ]
         # pool.map(bungae_func.data_maker, target_list)
-        bungae_func.data_maker(1000)
+        bungae_func.data_maker(100)
+        daangn_crawler(10)
+        hello_crawler(10)
 
         # Bungae_crawler(10000)
         return HttpResponse(status=200)
