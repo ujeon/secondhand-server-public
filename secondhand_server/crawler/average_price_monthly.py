@@ -15,6 +15,7 @@ def average_price_monthly(request):
     total_trade_quantity = 0
     highest_price = 0
     lowest_price = average_price_data.first()["lowest_price"]
+    daily = []
 
     for data in average_price_data:
         total_trade_price += (data["average_price"] * data["quantity"])
@@ -23,11 +24,13 @@ def average_price_monthly(request):
             highest_price = data["highest_price"]
         if data["lowest_price"] < lowest_price:
             lowest_price = data["lowest_price"]
+        daily.append(data)
 
     average_price_by_month = {
         "average_price": int(total_trade_price / total_trade_quantity),
         "lowest_price": lowest_price,
-        "highest_price": highest_price
+        "highest_price": highest_price,
+        "daily": daily
     }
 
     return JsonResponse(average_price_by_month)
