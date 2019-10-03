@@ -1,18 +1,21 @@
 from django.urls import path
 
-from . import views, filter_save, average_price_save
+from . import views, filter_save, average_price_save, average_price_monthly, average_top5
 
 urlpatterns = [
-    path("eachModelInfo/<str:brand>/<str:model>/info/",
+    path("<str:brand>/<str:model>/info/",
          views.handle_each_model_info),
     path("search/", views.handle_search_price),
-    path("all/", views.search_route_brand_model),
-    path("allCategories/", views.get_categories),
+    path("list/", views.search_route_brand_model),
+    path("category/", views.get_categories),
     path("category/<str:category>/brand/", views.get_brands),
-    path("category/<str:category>/brand/<str:brand>/model/", views.get_models),
-    path("input/data/", views.multi_crawl_save),
-    path("input/filter/", filter_save.retrieve_raw_data),
-    path("input/average/", average_price_save.retrieve_filtered_data),
+    path("category/<str:category>/<str:brand>/model/", views.get_models),
+    path("top5/", average_top5.average_top5),
+    path("average/monthly/", average_price_monthly.average_price_monthly),
+    # path("input/data/", views.multi_crawl_save),
+    # path("input/filter/", filter_save.retrieve_raw_data),
+    # path("input/average/", average_price_save.retrieve_filtered_data),
+    path("save_auto/", views.save_all_auto),
 ]
 
 

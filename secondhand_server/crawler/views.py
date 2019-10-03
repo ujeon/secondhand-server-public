@@ -1,16 +1,18 @@
 from django.shortcuts import render
 
-from .models import Raw_data
 from .bungae_crawler import Bungae_crawler
 from .daangn_crawler import daangn_crawler
 from .hello_crawler import hello_crawler
 
-from .models import Filtered_data, Average_price, Category
+from .models import Raw_data, Filtered_data, Average_price, Category
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.core import serializers
 from multiprocessing import Pool
 import json
+import threading
+from .filter_save import retrieve_raw_data
+from .average_price_save import retrieve_filtered_data
 
 
 # Create your views here.
@@ -133,23 +135,31 @@ def get_models(request, category, brand):
     return HttpResponse(response)
 
 
-def multi_crawl_save(request):
-    try:
-        bungae_func = Bungae_crawler("유모차")
-        # hello_process = Process(target=hello_crawler, args=(45,))
-        # daangn_process = Process(target=daangn_crawler, args=(800,))
-        # bungae_process = Process(target=bungae_func.data_maker, args=(10000,))
-        # hello_process.start()
-        # daangn_process.start()
-        # bungae_process.start()
-        # hello_crawler(45)
-        # pool = Pool(processes=4)
-        # target_list = [5000, ]
-        # pool.map(bungae_func.data_maker, target_list)
-        bungae_func.data_maker(1000)
+def multi_crawl_save():
+    bungae_func = Bungae_crawler("유모차")
+    bungae_func.data_maker(100)
+    daangn_crawler(10)
+    hello_crawler(10)
+    return
 
-        # Bungae_crawler(10000)
-        return HttpResponse(status=200)
-    except Exception as err:
-        print(err)
-        return HttpResponse(status=500)
+
+def save_hook():
+    Raw_data.objects.all().delete()
+    multi_crawl_save()
+    retrieve_raw_data()
+    retrieve_filtered_data()
+
+
+def set_interval(func, sec):
+    def func_wrapper():
+        set_interval(func, sec)
+        func()
+    t = threading.Timer(sec, func_wrapper)
+    t.start()
+    return t
+
+
+def save_all_auto(request):
+    save_hook()
+    set_interval(save_hook, 86400)
+    return HttpResponse(status=200)

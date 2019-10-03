@@ -75,8 +75,10 @@ MIDDLEWARE = [
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:8000",
     "http://127.0.0.1:8000",
-    "http://10.0.2.2:8000",
+    "http://3.17.152.1:8000",
+    "http://10.0.2.2:8000", /* android emulator 사용시, localhost 주소 */
 ]
+
 
 CORS_ORIGIN_ALLOW_ALL = True
 
