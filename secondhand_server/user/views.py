@@ -25,11 +25,18 @@ def handle_user_signup(request):
     result = {}
 
     for data in user_data:
-        if data["email"] == request_body["email"]:
-            result["message"] = "이미 존재하는 이메일이에요."
+        if (
+            data["email"] == request_body["email"]
+            and data["nickname"] == request_body["nickname"]
+        ):
+            result["emailErrMsg"] = "이미 존재하는 이메일이에요."
+            result["nickErrMsg"] = "이미 존재하는 닉네임이에요."
+            return HttpResponse(JsonResponse(result))
+        elif data["email"] == request_body["email"]:
+            result["emailErrMsg"] = "이미 존재하는 이메일이에요."
             return HttpResponse(JsonResponse(result))
         elif data["nickname"] == request_body["nickname"]:
-            result["message"] = "이미 존재하는 닉네임이에요. 다시 설정해주세요."
+            result["nickErrMsg"] = "이미 존재하는 닉네임이에요."
             return HttpResponse(JsonResponse(result))
 
     new_user = User(
@@ -55,19 +62,21 @@ def handle_user_signin(request):
     for data in user_data:
 
         hashed_pwd = AESCipher().decrypt_str(data["password"])
-        if data["email"] != request_body["email"]:
-            result["message"] = "이메일 주소가 일치하지 않습니다."
+        if (
+            data["email"] != request_body["email"]
+            or hashed_pwd != request_body["password"]
+        ):
+            result["message"] = "false"
             return HttpResponse(JsonResponse(result), status=403)
-        elif hashed_pwd != request_body["password"]:
-            result["message"] = "비밀번호가 일치하지 않습니다."
-            return HttpResponse(JsonResponse(result), status=403)
+
         elif (
             data["email"] == request_body["email"]
             and hashed_pwd == request_body["password"]
         ):
             token = token_generator("user_id", data["id"])
+            result["message"] = "true"
 
-            response = HttpResponse(status=200)
+            response = HttpResponse(JsonResponse(result), status=200)
             response["token"] = token
 
             return response
