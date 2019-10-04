@@ -7,4 +7,5 @@ urlpatterns = [
     path("signin/", views.handle_user_signin),
     path("info/", views.handle_userinfo),
     path("favorite/", views.handle_user_favorite),
+    path("auth/", views.check_user_auth),
 ]
