@@ -127,3 +127,26 @@ def handle_user_favorite(request):
         new_favorite.save()
 
     return HttpResponse(status=200)
+
+
+def check_user_auth(request):
+    token = request.headers["token"]
+    if token == "null":
+        return HttpResponse(status=403)
+
+    claims = decode_token(token)
+    print(claims)
+    print(
+        (float(claims["exp"]) + float(claims["iat"])) < int(round(time.time() * 1000))
+    )
+    if claims:
+        if claims["iss"] != "jellyfish":
+            return HttpResponse(status=403)
+        if (float(claims["exp"]) + float(claims["iat"])) < int(
+            round(time.time() * 1000)
+        ):
+            return HttpResponse(status=403)
+    else:
+        return HttpResponse(status=403)
+
+    return HttpResponse(status=200)
