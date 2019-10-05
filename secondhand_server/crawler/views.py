@@ -17,7 +17,7 @@ from .average_price_save import retrieve_filtered_data
 
 # Create your views here.
 
-
+# result page
 def handle_each_model_info(request, brand, model):
     average_price = Average_price.objects.filter(brand=brand, model=model)
     filtered_data = Filtered_data.objects.filter(brand=brand, model=model)
@@ -37,13 +37,13 @@ def handle_each_model_info(request, brand, model):
     return HttpResponse(response)
 
 
+# search page
 def handle_search_price(request):
     request_body = json.loads(request.body)
 
     if request_body["brand"] and request_body["model"]:
         price_filtered_data = Filtered_data.objects.filter(
-            price__range=[request_body["min_price"],
-                          request_body["max_price"]],
+            price__range=[request_body["min_price"], request_body["max_price"]],
             brand=request_body["brand"],
             model=request_body["model"],
         )
@@ -53,17 +53,14 @@ def handle_search_price(request):
             price__range=[request_body["min_price"], request_body["max_price"]]
         )
 
-    average_price = Average_price.objects.all()
-
     temp = []
     for data in price_filtered_data.values():
-        for average_data in average_price.values():
-            if (
-                data["brand"] == average_data["brand"]
-                and data["model"] == average_data["model"]
-            ):
-                data["average_price"] = average_data["average_price"]
-                temp.append(data)
+        average_price = Average_price.objects.filter(
+            brand=data["brand"], model=data["model"]
+        ).values()[0]
+
+        data["average_price"] = average_price["average_price"]
+        temp.append(data)
 
     response = JsonResponse(temp, safe=False)
 
@@ -100,8 +97,7 @@ def get_categories(request):
 
 
 def get_brands(request, category):
-    category_id = Category.objects.filter(
-        category_name=category).values("id")[0]
+    category_id = Category.objects.filter(category_name=category).values("id")[0]
     filtered_data = (
         Filtered_data.objects.filter(category=category_id["id"])
         .values("brand")
@@ -118,8 +114,7 @@ def get_brands(request, category):
 
 
 def get_models(request, category, brand):
-    category_id = Category.objects.filter(
-        category_name=category).values("id")[0]
+    category_id = Category.objects.filter(category_name=category).values("id")[0]
     filtered_data = (
         Filtered_data.objects.filter(category=category_id["id"], brand=brand)
         .values("model")
@@ -154,6 +149,7 @@ def set_interval(func, sec):
     def func_wrapper():
         set_interval(func, sec)
         func()
+
     t = threading.Timer(sec, func_wrapper)
     t.start()
     return t
