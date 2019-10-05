@@ -9,6 +9,7 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from django.core import serializers
 from multiprocessing import Pool
+from django.db.models import Q
 import json
 import threading
 from .filter_save import retrieve_raw_data
@@ -56,7 +57,7 @@ def handle_search_price(request):
     temp = []
     for data in price_filtered_data.values():
         average_price = Average_price.objects.filter(
-            brand=data["brand"], model=data["model"]
+            Q(brand=data["brand"]) | Q(model=data["model"])
         ).values()[0]
 
         data["average_price"] = average_price["average_price"]
