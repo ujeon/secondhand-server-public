@@ -41,7 +41,7 @@ class Filtered_data(models.Model):
     location = models.CharField(max_length=60)
 
     def __str__(self):
-        return self.brand
+        return "user_data: {} {} {} ".format(self.id, self.brand, self.model)
 
 
 class Average_price(models.Model):

@@ -14,7 +14,7 @@ from django.db.models import Q
 from django.utils import timezone
 from authlib.jose import jwt
 
-
+# POST
 def handle_user_signup(request):
     request_body = json.loads(request.body)
 
@@ -50,6 +50,7 @@ def handle_user_signup(request):
     return HttpResponse(JsonResponse(result), status=200)
 
 
+# POST
 def handle_user_signin(request):
     request_body = json.loads(request.body)
 
@@ -82,8 +83,8 @@ def handle_user_signin(request):
             return response
 
 
+# GET
 def handle_userinfo(request):
-    request_body = json.loads(request.body)
     token = request.headers["token"]
     claims = decode_token(token)
     user_id = claims["user_id"]
@@ -92,16 +93,14 @@ def handle_userinfo(request):
 
     if user:
         result = {}
-        user_data = User.objects.get(id=request_body["user_id"])
+        user_data = User.objects.get(id=user_id)
         result["id"] = user_data.__dict__["id"]
         result["email"] = user_data.__dict__["email"]
         result["nickname"] = user_data.__dict__["nickname"]
         result["signup_date"] = user_data.__dict__["signup_date"]
 
         favorite_data = (
-            Favorite.objects.filter(user=request_body["user_id"])
-            .values("filtered_data_id")
-            .order_by()
+            Favorite.objects.filter(user=user_id).values("filtered_data_id").order_by()
         )
         result["favorites"] = []
         for data in favorite_data:
@@ -116,26 +115,56 @@ def handle_userinfo(request):
         return HttpResponse(status=403)
 
 
+# GET favorite/info
+def handle_user_favorite_info(request):
+    token = request.headers["token"]
+    claims = decode_token(token)
+    user_id = claims["user_id"]
+
+    user_favorite = Favorite.objects.filter(user=user_id).values()
+    result = []
+    for data in user_favorite:
+        user_favorite_list = Filtered_data.objects.filter(
+            id=data["filtered_data_id"]
+        ).values()[0]
+        result.append(user_favorite_list)
+
+    return HttpResponse(JsonResponse(result, safe=False), status=200)
+
+
 # favorite 리스트에 어떤 데이터를 내려줄지 한 번 다같이 고민해보기
+
+
 def handle_user_favorite(request):
     request_body = json.loads(request.body)
 
+    token = request.headers["token"]
+    claims = decode_token(token)
+    user_id = claims["user_id"]
+
     favorite_data = Favorite.objects.filter(
-        user=request_body["user_id"], filtered_data_id=request_body["list_id"]
+        user=user_id, filtered_data_id=request_body["list_id"]
     ).values("user", "filtered_data_id")
 
     if favorite_data:
         Favorite.objects.filter(
-            user=request_body["user_id"], filtered_data_id=request_body["list_id"]
+            user=user_id, filtered_data_id=request_body["list_id"]
         ).delete()
     else:
         new_favorite = Favorite(
-            user=User.objects.get(id=request_body["user_id"]),
-            filtered_data_id=request_body["list_id"],
+            user=User.objects.get(id=user_id), filtered_data_id=request_body["list_id"]
         )
         new_favorite.save()
 
-    return HttpResponse(status=200)
+    user_favorite = Favorite.objects.filter(user=user_id).values()
+    result = []
+    for data in user_favorite:
+        user_favorite_list = Filtered_data.objects.filter(
+            id=data["filtered_data_id"]
+        ).values()[0]
+        result.append(user_favorite_list)
+
+    return HttpResponse(JsonResponse(result, safe=False), status=200)
 
 
 def check_user_auth(request):
