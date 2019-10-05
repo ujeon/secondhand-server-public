@@ -9,7 +9,7 @@ def average_price_monthly(request):
     month_ago = today - datetime.timedelta(30)
     loaded_model = json.loads(request.body)["model"]
     average_price_data = Average_price.objects.filter(
-        date__range=[month_ago, today], model=loaded_model).values()
+        date__range=[month_ago, today], model=loaded_model).order_by("date").values()
 
     total_trade_price = 0
     total_trade_quantity = 0
