@@ -99,17 +99,6 @@ def handle_userinfo(request):
         result["nickname"] = user_data.__dict__["nickname"]
         result["signup_date"] = user_data.__dict__["signup_date"]
 
-        favorite_data = (
-            Favorite.objects.filter(user=user_id).values("filtered_data_id").order_by()
-        )
-        result["favorites"] = []
-        for data in favorite_data:
-            filtered_data = Filtered_data.objects.filter(
-                id=data["filtered_data_id"]
-            ).values()
-            for favorite in filtered_data:
-                result["favorites"].append(favorite)
-
         return HttpResponse(JsonResponse(result), status=200)
     else:
         return HttpResponse(status=403)
