@@ -12,3 +12,5 @@ db.sqlite3
 /static
 
 .DS_Store
+
+/secondhand_server/secret.json
