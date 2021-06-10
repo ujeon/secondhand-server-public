@@ -8,7 +8,7 @@ pylint = "*"
 black = "*"
 
 [packages]
-django = "~=2.2.5"
+django = "~=2.2.24"
 requests = "*"
 bs4 = "*"
 selenium = "*"
